@@ -15,6 +15,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 /**
 *  
 * @author Lee Newfeld
@@ -34,7 +38,15 @@ public abstract class BaseTest {
     @Autowired
     protected WebApplicationContext webApplicationContext;
     
+    protected ObjectMapper jsonMapper;
+    
 	protected MockMvc mvc;
+	
+	protected BaseTest() {
+		
+		jsonMapper = new ObjectMapper();
+		jsonMapper.enable(SerializationFeature.INDENT_OUTPUT);
+	}
 	
     @Before
     public void beforeTest() {
@@ -42,5 +54,10 @@ public abstract class BaseTest {
         MockitoAnnotations.initMocks(this);
         
         mvc = webAppContextSetup(webApplicationContext).build();
+    }
+    
+    protected String prettyPrint(Object o) throws JsonProcessingException {
+    	
+    	return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
     }
 }

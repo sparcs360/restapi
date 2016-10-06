@@ -82,4 +82,67 @@ public class SkyBetServiceTest extends BaseTest {
         
 		log.trace("-shouldGetResponseFromGetAvailable");
 	}
+	
+	@Test
+	public void shouldGetReceiptForValidBet() {
+
+		log.trace("+shouldGetReceiptForValidBet");
+		
+		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 10, 1);
+		SkyBetReceipt receipt = skyBetService.placeBet(bet, 100);
+		assertThat(receipt, notNullValue());
+		assertThat(receipt.getBet(), is(bet));
+		assertThat(receipt.getStake(), is(100));
+		assertThat(receipt.getTransactionId(), greaterThan(0));
+
+		log.trace("-shouldGetReceiptForValidBet");
+	}
+
+	@Test
+	public void shouldntGetReceiptForInvalidBetId() {
+
+		log.trace("+shouldntGetReceiptForInvalidBetId");
+		
+		SkyBet bet = new SkyBet(999, "World Cup 2018", "England", 10, 1);
+		SkyBetReceipt receipt = skyBetService.placeBet(bet, 100);
+		assertThat(receipt, nullValue());
+
+		log.trace("-shouldntGetReceiptForInvalidBetId");
+	}
+
+	@Test
+	public void shouldntGetReceiptForInvalidOdds() {
+
+		log.trace("+shouldntGetReceiptForInvalidOdds");
+		
+		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 100, 1);
+		SkyBetReceipt receipt = skyBetService.placeBet(bet, 100);
+		assertThat(receipt, nullValue());
+
+		log.trace("-shouldntGetReceiptForInvalidOdds");
+	}
+
+	@Test
+	public void shouldntGetReceiptForZeroStake() {
+
+		log.trace("+shouldntGetReceiptForZeroStake");
+		
+		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 100, 1);
+		SkyBetReceipt receipt = skyBetService.placeBet(bet, 0);
+		assertThat(receipt, nullValue());
+
+		log.trace("-shouldntGetReceiptForZeroStake");
+	}
+
+	@Test
+	public void shouldntGetReceiptForNegativeStake() {
+
+		log.trace("+shouldntGetReceiptForNegativeStake");
+		
+		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 100, 1);
+		SkyBetReceipt receipt = skyBetService.placeBet(bet, -100);
+		assertThat(receipt, nullValue());
+
+		log.trace("-shouldntGetReceiptForNegativeStake");
+	}
 }
