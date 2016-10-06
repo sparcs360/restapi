@@ -4,12 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sparcs</groupId>
-	<artifactId>restapi</artifactId>
+	<artifactId>betapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>restapi</name>
-	<description>restapi</description>
+	<name>betapi</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -46,4 +45,9 @@
 		</plugins>
 	</build>
 
+	<description>betapi</description>
+	<scm>
+		<url>https://github.com/sparcs360/restapi</url>
+		<developerConnection>Lee Newfeld</developerConnection>
+	</scm>
 </project>

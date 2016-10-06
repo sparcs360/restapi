@@ -1,4 +1,4 @@
-package com.sparcs.restapi;
+package com.sparcs.betapi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
