@@ -33,7 +33,20 @@ public class Bet {
 		this.name = name;
 		this.odds = odds;
 	}
-	
+
+	/**
+	 * @param sb A {@link SkyBet} to base this {@link Bet} on.
+	 */
+	public Bet(SkyBet sb) {
+
+		super();
+		
+		id = sb.getId();
+		eventName = sb.getEventName();
+		name = sb.getName();
+		odds = sb.getOdds().getDecimalOdds();
+	}
+
 	/**
 	 * @return The unique id of the Bet
 	 */
