@@ -1,5 +1,6 @@
 package com.sparcs;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestOperations;
@@ -18,8 +19,8 @@ public class ApplicationConfiguration {
 	 * http://skybettechtestapi.herokuapp.com/ API.
 	 */
 	@Bean
-	public RestOperations getRESTClient() {
+	public RestOperations restTemplate(RestTemplateBuilder builder) {
 		
-		return new RestTemplate();
+		return builder.build();
 	}
 }
