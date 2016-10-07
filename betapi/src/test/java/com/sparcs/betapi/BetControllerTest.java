@@ -2,7 +2,7 @@ package com.sparcs.betapi;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+//import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
         mvc.perform(get("/available"))
-           .andDo(print())
+           //.andDo(print())
            .andExpect(status().isOk())
            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
            .andExpect(jsonPath("$", hasSize(6)))
