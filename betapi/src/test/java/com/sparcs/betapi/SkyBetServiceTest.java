@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.sparcs.BaseTest;
 
 /**
- * {@link SkyBetService} tests
+ * {@link SkyBetServiceImpl} tests
  *  
  * @author Lee Newfeld
  */

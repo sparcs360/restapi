@@ -27,7 +27,7 @@ public class SkyBetReceipt {
 	 * @param stake
 	 * @param transactionId
 	 */
-	public SkyBetReceipt(SkyBet bet, int stake, int transactionId) {
+	SkyBetReceipt(SkyBet bet, int stake, int transactionId) {
 
 		this.bet = bet;
 		this.stake = stake;

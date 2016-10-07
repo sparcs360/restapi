@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import com.sparcs.BaseTest;
 
 /**
- * {@link BetController} tests
+ * {@link BetControllerImpl} tests
  *  
  * @author Lee Newfeld
  */

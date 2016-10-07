@@ -37,7 +37,7 @@ public class SkyBet {
 		 * @param numerator
 		 * @param denominator
 		 */
-		public Odds(int numerator, int denominator) {
+		Odds(int numerator, int denominator) {
 
 			this.numerator = numerator;
 			this.denominator = denominator;
@@ -119,7 +119,7 @@ public class SkyBet {
 	 * @param numerator
 	 * @param denominator
 	 */
-	public SkyBet(int id, String eventName, String name, int numerator, int denominator) {
+	SkyBet(int id, String eventName, String name, int numerator, int denominator) {
 
 		this.id = id;
 		this.eventName = eventName;

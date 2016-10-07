@@ -29,7 +29,7 @@ public class SkyBetSlip {
 	 * @param odds The requested odds.
 	 * @param stake The amount to put at risk.
 	 */
-	public SkyBetSlip(int betId, SkyBet.Odds odds, int stake) {
+	SkyBetSlip(int betId, SkyBet.Odds odds, int stake) {
 
 		this.betId = betId;
 		this.odds = odds;

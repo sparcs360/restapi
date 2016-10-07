@@ -24,7 +24,7 @@ public class Bet {
 	 * @param name The name of the entity being Bet on
 	 * @param odds The odds offered.
 	 */
-	public Bet(int id, String eventName, String name, double odds) {
+	Bet(int id, String eventName, String name, double odds) {
 		
 		super();
 		
