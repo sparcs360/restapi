@@ -18,7 +18,7 @@ import com.sparcs.betapi.SkyBetService;
  * @author Lee Newfeld
  */
 @RestController
-public class BetControllerImpl implements BetController {
+class BetControllerImpl implements BetController {
 
 	@Autowired
 	private SkyBetService skyBetService;
