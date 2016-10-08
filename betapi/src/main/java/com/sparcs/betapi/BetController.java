@@ -14,4 +14,12 @@ public interface BetController {
 	 * @return
 	 */
 	public List<Bet> getAvailable();
+	
+	/**
+	 * Place a bet...
+	 *  
+	 * @param slip Your {@link BetSlip betting slip}
+	 * @return A digital receipt 
+	 */
+	BetReceipt placeBet(BetSlip slip);
 }

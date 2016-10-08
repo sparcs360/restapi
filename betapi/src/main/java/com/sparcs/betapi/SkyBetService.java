@@ -18,10 +18,8 @@ public interface SkyBetService {
 	/**
 	 * Place a bet...
 	 *  
-	 * @param bet The {@link SkyBet} being taken
-	 * @param stake The amount to wager
-	 * @return A digital receipt 
+	 * @param slip A {@link SkyBetSlip} describing the bet you wish to place
+	 * @return A digital receipt (if the bet was accepted)
 	 */
-	SkyBetReceipt placeBet(SkyBet bet, int stake);
-
+	SkyBetReceipt placeBet(SkyBetSlip slip);
 }

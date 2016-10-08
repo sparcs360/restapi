@@ -35,11 +35,6 @@ public class SkyBetServiceTest extends BaseTest {
 	@Autowired
 	private SkyBetService skyBetService;
 
-	/**
-	 * Should 
-	 *  
-	 * @throws Exception
-	 */
 	@Test
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
@@ -54,78 +49,100 @@ public class SkyBetServiceTest extends BaseTest {
 		assertThat(bets.get(0).getName(), is("England"));
 		assertThat(bets.get(0).getOdds().getNumerator(), is(10));
 		assertThat(bets.get(0).getOdds().getDenominator(), is(1));
-		assertThat(bets.get(0).getOdds().getDecimalOdds(), is(11.0));
+		assertThat(bets.get(0).getOdds().getDecimalOdds().doubleValue(), is(11.0));
 		
 		assertThat(bets.get(1).getId(), is(2));
 		assertThat(bets.get(1).getEventName(), is("World Cup 2018"));
 		assertThat(bets.get(1).getName(), is("Brazil"));
 		assertThat(bets.get(1).getOdds().getNumerator(), is(1));
 		assertThat(bets.get(1).getOdds().getDenominator(), is(1));
-		assertThat(bets.get(1).getOdds().getDecimalOdds(), is(2.0));
+		assertThat(bets.get(1).getOdds().getDecimalOdds().doubleValue(), is(2.0));
 
 		assertThat(bets.get(2).getId(), is(3));
 		assertThat(bets.get(2).getEventName(), is("World Cup 2018"));
 		assertThat(bets.get(2).getName(), is("Spain"));
 		assertThat(bets.get(2).getOdds().getNumerator(), is(3));
 		assertThat(bets.get(2).getOdds().getDenominator(), is(1));
-		assertThat(bets.get(2).getOdds().getDecimalOdds(), is(4.0));
+		assertThat(bets.get(2).getOdds().getDecimalOdds().doubleValue(), is(4.0));
 
 		assertThat(bets.get(3).getId(), is(4));
 		assertThat(bets.get(3).getEventName(), is("Next General Election"));
 		assertThat(bets.get(3).getName(), is("Labour"));
 		assertThat(bets.get(3).getOdds().getNumerator(), is(7));
 		assertThat(bets.get(3).getOdds().getDenominator(), is(4));
-		assertThat(bets.get(3).getOdds().getDecimalOdds(), is(2.75));
+		assertThat(bets.get(3).getOdds().getDecimalOdds().doubleValue(), is(2.75));
 
 		assertThat(bets.get(4).getId(), is(5));
 		assertThat(bets.get(4).getEventName(), is("Next General Election"));
 		assertThat(bets.get(4).getName(), is("Conservatives"));
 		assertThat(bets.get(4).getOdds().getNumerator(), is(2));
 		assertThat(bets.get(4).getOdds().getDenominator(), is(1));
-		assertThat(bets.get(4).getOdds().getDecimalOdds(), is(3.0));
+		assertThat(bets.get(4).getOdds().getDecimalOdds().doubleValue(), is(3.0));
 
 		assertThat(bets.get(5).getId(), is(6));
 		assertThat(bets.get(5).getEventName(), is("Next General Election"));
 		assertThat(bets.get(5).getName(), is("Liberal Democrats"));
 		assertThat(bets.get(5).getOdds().getNumerator(), is(17));
 		assertThat(bets.get(5).getOdds().getDenominator(), is(1));
-		assertThat(bets.get(5).getOdds().getDecimalOdds(), is(18.0));
+		assertThat(bets.get(5).getOdds().getDecimalOdds().doubleValue(), is(18.0));
         
 		log.trace("-shouldGetResponseFromGetAvailable");
 	}
-	
+
 	@Test
 	public void shouldGetReceiptForValidBet() {
 
 		log.trace("+shouldGetReceiptForValidBet");
 		
-		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 10, 1);
-		SkyBetReceipt receipt = skyBetService.placeBet(bet, 100);
+		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 100);
+		SkyBetReceipt receipt = skyBetService.placeBet(slip);
+		
 		assertThat(receipt, notNullValue());
-		assertThat(receipt.getBet(), is(bet));
-		assertThat(receipt.getStake(), is(100));
+		assertThat(receipt.getBet().getId(), is(slip.getBetId()));
+		assertThat(receipt.getBet().getOdds(), is(slip.getOdds()));
+		assertThat(receipt.getStake(), is(slip.getStake()));
 		assertThat(receipt.getTransactionId(), greaterThan(0));
 
 		log.trace("-shouldGetReceiptForValidBet");
 	}
 
+	@Test
+	public void shouldGetReceiptForValidBetWithZeroStake() {
+
+		log.trace("+shouldGetReceiptForValidBetWithZeroStake");
+		
+    	// Note: Sky API allow a zero stakes - the BetControllerImpl traps this condition.
+		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 0);
+		SkyBetReceipt receipt = skyBetService.placeBet(slip);
+		
+		assertThat(receipt, notNullValue());
+		assertThat(receipt.getBet().getId(), is(slip.getBetId()));
+		assertThat(receipt.getBet().getOdds(), is(slip.getOdds()));
+		assertThat(receipt.getStake(), is(slip.getStake()));
+		assertThat(receipt.getTransactionId(), greaterThan(0));
+
+		skyBetService.placeBet(slip);
+
+		log.trace("-shouldGetReceiptForValidBetWithZeroStake");
+	}
+
 	@Rule
 	public ExpectedException shouldntGetReceiptForInvalidBetIdException = ExpectedException.none();
 	@Test
-	public void shouldntGetReceiptForInvalidBetId() {
+	public void shouldntGetReceiptForNonExistentBetId() {
 
-		log.trace("+shouldntGetReceiptForInvalidBetId");
+		log.trace("+shouldntGetReceiptForNonExistentBetId");
 		
 		// No such bet with Id #999
-		SkyBet bet = new SkyBet(999, "World Cup 2018", "England", 10, 1);
-		
+		SkyBetSlip slip = new SkyBetSlip(999, new Odds(10, 1), 100);
+
 		shouldntGetReceiptForInvalidBetIdException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForInvalidBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
 		shouldntGetReceiptForInvalidBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
-		skyBetService.placeBet(bet, 100);
+		skyBetService.placeBet(slip);
 
-		log.trace("-shouldntGetReceiptForInvalidBetId");
+		log.trace("-shouldntGetReceiptForNonExistentBetId");
 	}
 
 	@Rule
@@ -136,13 +153,13 @@ public class SkyBetServiceTest extends BaseTest {
 		log.trace("+shouldntGetReceiptForZeroBetId");
 		
 		// No such bet with Id #0
-		SkyBet bet = new SkyBet(0, "World Cup 2018", "England", 10, 1);
+		SkyBetSlip slip = new SkyBetSlip(0, new Odds(10, 1), 100);
 		
 		// If betId <= 0 then the SkyBet API throws an HTTP 500 instead of a 418
 		shouldntGetReceiptForZeroBetIdException.expect(HttpServerErrorException.class);
 		shouldntGetReceiptForZeroBetIdException.expect(hasStatusCode(HttpStatus.INTERNAL_SERVER_ERROR));
 
-		skyBetService.placeBet(bet, 100);
+		skyBetService.placeBet(slip);
 
 		log.trace("-shouldntGetReceiptForZeroBetId");
 	}
@@ -155,13 +172,13 @@ public class SkyBetServiceTest extends BaseTest {
 		log.trace("+shouldntGetReceiptForNegativeBetId");
 
 		// No such bet with Id #-1
-		SkyBet bet = new SkyBet(-1, "World Cup 2018", "England", 10, 1);
+		SkyBetSlip slip = new SkyBetSlip(-1, new Odds(10, 1), 100);
 		
 		// If betId <= 0 then the SkyBet API throws an HTTP 500 instead of a 418
 		shouldntGetReceiptForNegativeBetIdException.expect(HttpServerErrorException.class);
 		shouldntGetReceiptForNegativeBetIdException.expect(hasStatusCode(HttpStatus.INTERNAL_SERVER_ERROR));
 
-		skyBetService.placeBet(bet, 100);
+		skyBetService.placeBet(slip);
 
 		log.trace("-shouldntGetReceiptForNegativeBetId");
 	}
@@ -174,35 +191,15 @@ public class SkyBetServiceTest extends BaseTest {
 		log.trace("+shouldntGetReceiptForInvalidOdds");
 		
 		// Odds don't match current odds
-		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 100, 1);
+		SkyBetSlip slip = new SkyBetSlip(1, new Odds(100, 1), 100);
 
 		shouldntGetReceiptForInvalidOddsException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForInvalidOddsException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
 		shouldntGetReceiptForInvalidOddsException.expect(jsonBodyMatches("{ \"error\": \"Incorrect Odds\" }"));
 
-		skyBetService.placeBet(bet, 100);
+		skyBetService.placeBet(slip);
 
 		log.trace("-shouldntGetReceiptForInvalidOdds");
-	}
-
-	@Rule
-	public ExpectedException shouldntGetReceiptForZeroStakeException = ExpectedException.none();
-	@Test
-	public void shouldntGetReceiptForZeroStake() {
-
-		log.trace("+shouldntGetReceiptForZeroStake");
-		
-		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 10, 1);
-		
-		shouldntGetReceiptForZeroStakeException.expect(HttpClientErrorException.class);
-		shouldntGetReceiptForZeroStakeException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
-		shouldntGetReceiptForZeroStakeException.expect(jsonBodyMatches("{ \"error\": \"Invalid Stake\" }"));
-
-    	// Note: SkyBetServiceImpl doesn't allow zero stakes but the Sky API it delegates to does.
-    	//       SkyBetServiceImpl raises an exception that looks similar to one the Sky API might. 
-		skyBetService.placeBet(bet, 0);
-
-		log.trace("-shouldntGetReceiptForZeroStake");
 	}
 
 	@Rule
@@ -212,14 +209,14 @@ public class SkyBetServiceTest extends BaseTest {
 
 		log.trace("+shouldntGetReceiptForNegativeStake");
 		
-		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 10, 1);
+		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), -100);
 		
 		shouldntGetReceiptForNegativeStakeException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForNegativeStakeException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
 		shouldntGetReceiptForNegativeStakeException.expect(jsonBodyMatches("{ \"error\": \"Invalid Stake\" }"));
 
 		// Negative stake isn't allowed
-		skyBetService.placeBet(bet, -100);
+		skyBetService.placeBet(slip);
 
 		log.trace("-shouldntGetReceiptForNegativeStake");
 	}

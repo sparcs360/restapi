@@ -2,7 +2,6 @@ package com.sparcs.betapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.sparcs.betapi.SkyBet.Odds;
 
 /**
  * Represents the taking of a {@link SkyBet bet}.
@@ -13,7 +12,7 @@ import com.sparcs.betapi.SkyBet.Odds;
 public class SkyBetSlip {
 
 	private int betId;
-	private SkyBet.Odds odds;
+	private Odds odds;
 	private int stake;
 
 	/**
@@ -29,22 +28,31 @@ public class SkyBetSlip {
 	 * @param odds The requested odds.
 	 * @param stake The amount to put at risk.
 	 */
-	SkyBetSlip(int betId, SkyBet.Odds odds, int stake) {
+	SkyBetSlip(int betId, Odds odds, int stake) {
 
 		this.betId = betId;
 		this.odds = odds;
 		this.stake = stake;
 	}
+//
+//	/**
+//	 * Constructor
+//	 * 
+//	 * @param bet A {@link SkyBet} to place the bet on.
+//	 * @param stake The amount to put at risk.
+//	 */
+//	public SkyBetSlip(SkyBet bet, int stake) {
+//
+//		this(bet.getId(), bet.getOdds(), stake);
+//	}
 
 	/**
 	 * Constructor
-	 * 
-	 * @param bet A {@link SkyBet} to place the bet on.
-	 * @param stake The amount to put at risk.
+	 * @param slip
 	 */
-	public SkyBetSlip(SkyBet bet, int stake) {
+	public SkyBetSlip(BetSlip slip) {
 
-		this(bet.getId(), bet.getOdds(), stake);
+		this(slip.getBetId(), new Odds(slip.getOdds()), slip.getStake());
 	}
 
 	/**
@@ -59,7 +67,7 @@ public class SkyBetSlip {
 	/**
 	 * @return The {@link Odds} for this Bet.
 	 */
-	public SkyBet.Odds getOdds() {
+	public Odds getOdds() {
 		
 		return odds;
 	}

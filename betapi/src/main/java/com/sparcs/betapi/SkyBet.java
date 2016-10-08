@@ -1,6 +1,5 @@
 package com.sparcs.betapi;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -14,96 +13,6 @@ public class SkyBet {
 	private String eventName;
 	private String name;
 	private Odds odds;
-	
-	/**
-	 * Represents the 'odds' substructure
-	 *  
-	 * @author Lee Newfeld
-	 */
-	public static class Odds {
-		
-		private int numerator;
-		private int denominator;
-
-		/**
-		 * Default Construtor
-		 */
-		Odds() {
-		}
-		
-		/**
-		 * Construction with specific fractional odds
-		 * 
-		 * @param numerator
-		 * @param denominator
-		 */
-		Odds(int numerator, int denominator) {
-
-			this.numerator = numerator;
-			this.denominator = denominator;
-		}
-
-		/**
-		 * @return The numerator element of the fractional odds
-		 */
-		public int getNumerator() {
-
-			return numerator;
-		}
-
-		/**
-		 * @return The denominator element of the fractional odds
-		 */
-		public int getDenominator() {
-			
-			return denominator;
-		}
-
-		/**
-		 * @return The odds in decimal format
-		 */
-		@JsonIgnore
-		public double getDecimalOdds() {
-			
-			if( denominator == 0 ) {
-				return Double.POSITIVE_INFINITY;
-			}
-			
-			return (double)numerator / denominator + 1;
-		}
-
-		@Override
-		public String toString() {
-			return "Odds [numerator=" + numerator + ", denominator=" + denominator + "]";
-		}
-
-		@Override
-		public int hashCode() {
-			
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + denominator;
-			result = prime * result + numerator;
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Odds other = (Odds) obj;
-			if (denominator != other.denominator)
-				return false;
-			if (numerator != other.numerator)
-				return false;
-			return true;
-		}
-	}
 
 	/**
 	 * Default Constructor

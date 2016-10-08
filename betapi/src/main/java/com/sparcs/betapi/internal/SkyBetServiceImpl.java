@@ -3,7 +3,6 @@ package com.sparcs.betapi.internal;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.io.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 
 import com.sparcs.betapi.SkyBet;
@@ -62,25 +60,12 @@ class SkyBetServiceImpl implements SkyBetService {
 	 * @see com.sparcs.betapi.SkyBetService#placeBet(com.sparcs.betapi.SkyBet, int)
 	 */
     @Override
-	public SkyBetReceipt placeBet(SkyBet bet, int stake) {
-    	
+	public SkyBetReceipt placeBet(SkyBetSlip slip) {
+
+    	log.trace("slip={}", slip.toString());
+
     	// Validate arguments
-    	Objects.requireNonNull(bet,  "bet");
-    	// Don't allow zero stakes through because the Sky API will take a
-    	// bet with zero stake (which we don't want).  Negative stakes are
-    	// correctly handled by the Sky API.
-    	if( stake == 0 ) {
-
-    		throw new HttpClientErrorException(
-    				HttpStatus.I_AM_A_TEAPOT,
-    				HttpStatus.I_AM_A_TEAPOT.getReasonPhrase(),
-    				"{ \"error\": \"Invalid Stake\" }".getBytes(),
-    				Charsets.UTF_8);
-    	}
-
-    	// Create a betting slip
-    	SkyBetSlip slip = new SkyBetSlip(bet, stake);
-    	log.trace(slip.toString());
+    	Objects.requireNonNull(slip,  "slip must not be null");
 
     	// POST the slip to SkyBet
     	ResponseEntity<SkyBetReceipt> response =
