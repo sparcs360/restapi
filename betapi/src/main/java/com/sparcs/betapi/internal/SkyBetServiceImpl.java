@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
-import com.sparcs.betapi.BetException;
+import com.sparcs.betapi.SkyBetException;
 import com.sparcs.betapi.SkyBet;
 import com.sparcs.betapi.SkyBetReceipt;
 import com.sparcs.betapi.SkyBetService;
@@ -68,13 +68,13 @@ class SkyBetServiceImpl implements SkyBetService {
 		// and return a more relevant error
 		if( slip.getBetId() < 1 ) {
 			
-			throw BetException.INVALID_BET_ID;
+			throw SkyBetException.INVALID_BET_ID;
 		}
     	// Sky API will allow a bet with zero stake to be taken.  We don't want
 		// that.
     	if( slip.getStake() == 0 ) {
 
-    		throw BetException.INVALID_STAKE;
+    		throw SkyBetException.INVALID_STAKE;
     	}
 
     	// POST the slip to SkyBet
