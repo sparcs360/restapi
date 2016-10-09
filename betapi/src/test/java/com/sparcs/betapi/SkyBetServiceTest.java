@@ -13,8 +13,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
@@ -29,16 +27,12 @@ import com.sparcs.BaseTest;
  */
 public class SkyBetServiceTest extends BaseTest {
 
-	private static final Logger log = LoggerFactory.getLogger(SkyBetServiceTest.class);
-
 	@Autowired
 	private SkyBetService skyBetService;
 
 	@Test
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
-		log.trace("+shouldGetResponseFromGetAvailable");
-		
 		List<SkyBet> bets = skyBetService.getAvailable();
 		assertThat(bets, notNullValue());
 		assertThat(bets, hasSize(6));
@@ -84,15 +78,11 @@ public class SkyBetServiceTest extends BaseTest {
 		assertThat(bets.get(5).getOdds().getNumerator(), is(17));
 		assertThat(bets.get(5).getOdds().getDenominator(), is(1));
 		assertThat(bets.get(5).getOdds().getDecimalOdds().doubleValue(), is(18.0));
-        
-		log.trace("-shouldGetResponseFromGetAvailable");
 	}
 
 	@Test
 	public void shouldGetReceiptForValidBet() {
 
-		log.trace("+shouldGetReceiptForValidBet");
-		
 		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 100);
 		SkyBetReceipt receipt = skyBetService.placeBet(slip);
 		
@@ -101,8 +91,6 @@ public class SkyBetServiceTest extends BaseTest {
 		assertThat(receipt.getBet().getOdds(), is(slip.getOdds()));
 		assertThat(receipt.getStake(), is(slip.getStake()));
 		assertThat(receipt.getTransactionId(), greaterThan(0));
-
-		log.trace("-shouldGetReceiptForValidBet");
 	}
 
 	@Rule
@@ -110,8 +98,6 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForZeroStake() {
 
-		log.trace("+shouldntGetReceiptForZeroStake");
-		
 		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 0);
 		
     	// Note: The Sky API allows a zero stake.
@@ -121,8 +107,6 @@ public class SkyBetServiceTest extends BaseTest {
 		shouldntGetReceiptForZeroStakeException.expect(jsonBodyMatches("{ \"error\": \"Invalid Stake\" }"));
 
 		skyBetService.placeBet(slip);
-
-		log.trace("-shouldntGetReceiptForZeroStake");
 	}
 
 	@Rule
@@ -130,8 +114,6 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForNonExistentBetId() {
 
-		log.trace("+shouldntGetReceiptForNonExistentBetId");
-		
 		// No such bet with Id #999
 		SkyBetSlip slip = new SkyBetSlip(999, new Odds(10, 1), 100);
 
@@ -140,8 +122,6 @@ public class SkyBetServiceTest extends BaseTest {
 		shouldntGetReceiptForNonExistentBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
 		skyBetService.placeBet(slip);
-
-		log.trace("-shouldntGetReceiptForNonExistentBetId");
 	}
 
 	@Rule
@@ -149,8 +129,6 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForZeroBetId() {
 
-		log.trace("+shouldntGetReceiptForZeroBetId");
-		
 		// No such bet with Id #0
 		SkyBetSlip slip = new SkyBetSlip(0, new Odds(10, 1), 100);
 		
@@ -161,16 +139,12 @@ public class SkyBetServiceTest extends BaseTest {
 		shouldntGetReceiptForZeroBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
 		skyBetService.placeBet(slip);
-
-		log.trace("-shouldntGetReceiptForZeroBetId");
 	}
 
 	@Rule
 	public ExpectedException shouldntGetReceiptForNegativeBetIdException = ExpectedException.none();
 	@Test
 	public void shouldntGetReceiptForNegativeBetId() {
-
-		log.trace("+shouldntGetReceiptForNegativeBetId");
 
 		// No such bet with Id #-1
 		SkyBetSlip slip = new SkyBetSlip(-1, new Odds(10, 1), 100);
@@ -182,8 +156,6 @@ public class SkyBetServiceTest extends BaseTest {
 		shouldntGetReceiptForNegativeBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
 		skyBetService.placeBet(slip);
-
-		log.trace("-shouldntGetReceiptForNegativeBetId");
 	}
 
 	@Rule
@@ -191,8 +163,6 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForInvalidOdds() {
 
-		log.trace("+shouldntGetReceiptForInvalidOdds");
-		
 		// Odds don't match current odds
 		SkyBetSlip slip = new SkyBetSlip(1, new Odds(100, 1), 100);
 
@@ -201,8 +171,6 @@ public class SkyBetServiceTest extends BaseTest {
 		shouldntGetReceiptForInvalidOddsException.expect(jsonBodyMatches("{ \"error\": \"Incorrect Odds\" }"));
 
 		skyBetService.placeBet(slip);
-
-		log.trace("-shouldntGetReceiptForInvalidOdds");
 	}
 
 	@Rule
@@ -210,8 +178,6 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForNegativeStake() {
 
-		log.trace("+shouldntGetReceiptForNegativeStake");
-		
 		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), -100);
 		
 		shouldntGetReceiptForNegativeStakeException.expect(HttpClientErrorException.class);
@@ -220,8 +186,6 @@ public class SkyBetServiceTest extends BaseTest {
 
 		// Negative stake isn't allowed
 		skyBetService.placeBet(slip);
-
-		log.trace("-shouldntGetReceiptForNegativeStake");
 	}
 	
 	//---

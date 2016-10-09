@@ -18,35 +18,24 @@ import com.sparcs.BaseTest;
  */
 public class SkyBetSlipTest extends BaseTest {
 
-	private static final Logger log = LoggerFactory.getLogger(SkyBetSlipTest.class);
-
 	private static final String JSON = "{ \"bet_id\": 1, \"odds\": { \"numerator\": 10, \"denominator\": 1 }, \"stake\": 100}";
 
 	@Test
 	public void shouldSerialiseToExpectedJson() throws JsonProcessingException {
 
-		log.trace("+shouldSerialiseToExpectedJson");
-
 		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 100);
 		String actualJson = prettyPrint(slip);
 		JSONAssert.assertEquals(JSON, actualJson, true);
-
-		log.trace("-shouldSerialiseToExpectedJson");
 	}
 	
 	@Test
 	public void shouldDeserialiseFromExpectedJson() throws Exception {
 		
-		log.trace("+shouldDeserialiseFromExpectedJson");
-
 		SkyBetSlip slip = jsonMapper.readValue(JSON, SkyBetSlip.class);
 		assertThat(slip, notNullValue());
 		assertThat(slip.getBetId(), is(1));
 		assertThat(slip.getOdds().getNumerator(), is(10));
 		assertThat(slip.getOdds().getDenominator(), is(1));
 		assertThat(slip.getStake(), is(100));
-
-		log.trace("-shouldDeserialiseFromExpectedJson");
-		
 	}
 }
