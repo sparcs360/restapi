@@ -1,5 +1,7 @@
 package com.sparcs.betapi;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -14,7 +16,7 @@ public class Bet {
 	private int id;
 	private String eventName;
 	private String name;
-	private double odds;
+	private BigDecimal odds;
 	
 	/**
 	 * Constructor
@@ -24,7 +26,7 @@ public class Bet {
 	 * @param name The name of the entity being Bet on
 	 * @param odds The odds offered.
 	 */
-	public Bet(int id, String eventName, String name, double odds) {
+	Bet(int id, String eventName, String name, BigDecimal odds) {
 		
 		super();
 		
@@ -52,6 +54,7 @@ public class Bet {
 	 */
 	@JsonProperty("bet_id")
 	public int getId() {
+		
 		return id;
 	}
 
@@ -60,6 +63,7 @@ public class Bet {
 	 */
 	@JsonProperty("event")
 	public String getEventName() {
+		
 		return eventName;
 	}
 
@@ -67,13 +71,15 @@ public class Bet {
 	 * @return The name of the entity being Bet on
 	 */
 	public String getName() {
+		
 		return name;
 	}
 
 	/**
 	 * @return The odds offered.
 	 */
-	public double getOdds() {
+	public BigDecimal getOdds() {
+		
 		return odds;
 	}
 	

@@ -13,78 +13,28 @@ public class SkyBet {
 	private String eventName;
 	private String name;
 	private Odds odds;
-	
+
 	/**
-	 * Represents the 'odds' substructure
-	 *  
-	 * @author Lee Newfeld
+	 * Default Constructor
 	 */
-	public static class Odds {
-		
-		private int numerator;
-		private int denominator;
-
-//		/**
-//		 * Constructor
-//		 * 
-//		 * @param numerator
-//		 * @param demoninator
-//		 */
-//		public Odds(int numerator, int demoninator) {
-//			
-//			super();
-//			
-//			this.numerator = numerator;
-//			this.demoninator = demoninator;
-//		}
-
-		/**
-		 * @return The numerator element of the fractional odds
-		 */
-		public int getNumerator() {
-
-			return numerator;
-		}
-
-		/**
-		 * @return The denominator element of the fractional odds
-		 */
-		public int getDenominator() {
-			
-			return denominator;
-		}
-
-		/**
-		 * @return The odds in decimal format
-		 */
-		public double getDecimalOdds() {
-			
-			if( denominator == 0 ) {
-				return Double.POSITIVE_INFINITY;
-			}
-			
-			return (double)numerator / denominator + 1;
-		}
+	SkyBet() {
 	}
 
-//	/**
-//	 * Constructor
-//	 * 
-//	 * @param id
-//	 * @param eventName
-//	 * @param name
-//	 * @param numerator
-//	 * @param denominator
-//	 */
-//	public SkyBet(int id, String eventName, String name, int numerator, int denominator) {
-//		
-//		super();
-//		
-//		this.id = id;
-//		this.eventName = eventName;
-//		this.name = name;
-//		this.odds = new Odds(numerator, denominator);
-//	}
+	/**
+	 * 
+	 * @param id
+	 * @param eventName
+	 * @param name
+	 * @param numerator
+	 * @param denominator
+	 */
+	SkyBet(int id, String eventName, String name, int numerator, int denominator) {
+
+		this.id = id;
+		this.eventName = eventName;
+		this.name = name;
+		this.odds = new Odds(numerator, denominator);
+	}
 
 	/**
 	 * @return The unique id of the Bet
@@ -117,6 +67,47 @@ public class SkyBet {
 		return odds;
 	}
 	
+	@Override
+	public int hashCode() {
+		
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((eventName == null) ? 0 : eventName.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((odds == null) ? 0 : odds.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SkyBet other = (SkyBet) obj;
+		if (eventName == null) {
+			if (other.eventName != null)
+				return false;
+		} else if (!eventName.equals(other.eventName))
+			return false;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (odds == null) {
+			if (other.odds != null)
+				return false;
+		} else if (!odds.equals(other.odds))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return "SkyBet [id=" + id + ", eventName=" + eventName + ", name=" + name + ", odds.numerator=" + odds.getNumerator()
