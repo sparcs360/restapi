@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
@@ -47,12 +46,6 @@ class SkyBetServiceImpl implements SkyBetService {
 		                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SkyBet>>() {});
     	log.trace(response.toString());
 
-    	// Expecting HTTP 200 on success
-		// TODO: What to do about other 2xx statuses?
-    	if( response.getStatusCode() != HttpStatus.OK ) {
-
-    	}
-
 		return response.getBody();
     }
 
@@ -81,12 +74,6 @@ class SkyBetServiceImpl implements SkyBetService {
     	ResponseEntity<SkyBetReceipt> response =
     			restClient.postForEntity(URL_BETS, slip, SkyBetReceipt.class);
     	log.trace(response.toString());
-    	
-    	// Expecting HTTP 201 on success
-		// TODO: What to do about other 2xx statuses?
-    	if( response.getStatusCode() != HttpStatus.CREATED ) {
-    		
-    	}
     	
 		return response.getBody();
     }
