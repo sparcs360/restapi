@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ApplicationTest extends BaseTest {
 
 	@Test
-	public void contextLoads() {
+	public void shouldLoadContext() {
 		
-		log.trace("+contextLoads");
+		log.trace("+shouldLoadContext");
 
-		log.trace("-contextLoads");
+		log.trace("-shouldLoadContext");
 	}
 }

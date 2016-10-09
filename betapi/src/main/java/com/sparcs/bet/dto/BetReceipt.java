@@ -1,18 +1,25 @@
 package com.sparcs.bet.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.sparcs.bet.api.BetController;
 
-public class BetReceipt {
+/**
+ * A digital receipt obtained by successfully
+ * {@link BetController#placeBet(BetSlip) placing a bet}.
+ * 
+ * @author Lee Newfeld
+ */
+public class BetReceipt extends ReceiptBase {
 
+	private static final long serialVersionUID = 9212709336909641200L;
+	
 	private Bet bet;
-	private int stake;
-	private int transactionId;
 
 	/**
-	 * Default Constructor
+	 * Constructor for Faster Jackson
 	 */
-	BetReceipt() {
+	@SuppressWarnings("unused")
+	private BetReceipt() {
 	}
 	
 	/**
@@ -24,17 +31,16 @@ public class BetReceipt {
 	 */
 	public BetReceipt(Bet bet, int stake, int transactionId) {
 
+		super(stake, transactionId);
+		
 		this.bet = bet;
-		this.stake = stake;
-		this.transactionId = transactionId;
 	}
 
 	public BetReceipt(SkyBetReceipt receipt) {
 
-		SkyBet skyBet = receipt.getBet();
-		this.bet = new Bet(skyBet);
-		this.stake = receipt.getStake();
-		this.transactionId = receipt.getTransactionId();
+		super(receipt.getStake(), receipt.getTransactionId());
+
+		bet = new Bet(receipt.getBet());
 	}
 
 	/**
@@ -46,26 +52,9 @@ public class BetReceipt {
 		return bet;
 	}
 	
-	/**
-	 * @return The amount at risk.
-	 */
-	public int getStake() {
-		
-		return stake;
-	}
-	
-	/**
-	 * @return The unique transaction Id for this wager.
-	 */
-	@JsonProperty("transaction_id")
-	public int getTransactionId() {
-		
-		return transactionId;
-	}
-
 	@Override
 	public String toString() {
 		
-		return "BetReceipt [bet=" + bet + ", stake=" + stake + ", transactionId=" + transactionId + "]";
+		return "BetReceipt [bet=" + bet + ", stake=" + getStake() + ", transactionId=" + getTransactionId() + "]";
 	}
 }

@@ -1,30 +1,28 @@
 package com.sparcs.bet.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Represents a betting slip
  * 
  * @author Lee Newfeld
  */
-@JsonPropertyOrder(alphabetic=true)
-public class BetSlip implements Serializable {
+public final class BetSlip extends BetBase {
 
 	private static final long serialVersionUID = -8986042172060371020L;
 	
-	private int betId;
 	private BigDecimal odds;
 	private int stake;
 
 	/**
-	 * Default Constructor
+	 * Constructor for Faster Jackson
 	 */
-	BetSlip() {
+	@SuppressWarnings("unused")
+	private BetSlip() {
+		
+		super();
 	}
 	
 	/**
@@ -36,24 +34,23 @@ public class BetSlip implements Serializable {
 	 */
 	public BetSlip(int betId, BigDecimal odds, int stake) {
 
-		super();
+		super(betId);
 		
-		this.betId = betId;
 		this.odds = odds;
 		this.stake = stake;
 	}
 
-	@JsonProperty("bet_id")
-	public int getBetId() {
-		
-		return betId;
-	}
-	
+	/**
+	 * @return The requested odds
+	 */
 	public BigDecimal getOdds() {
 		
 		return odds;
 	}
 	
+	/**
+	 * @return The amount at risk
+	 */
 	public int getStake() {
 		
 		return stake;
@@ -70,6 +67,6 @@ public class BetSlip implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BetSlip [betId=" + betId + ", odds=" + odds + ", stake=" + stake + "]";
+		return "BetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + stake + "]";
 	}
 }

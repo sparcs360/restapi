@@ -21,16 +21,17 @@ public class Odds {
 	private int denominator;
 
 	/**
-	 * Default Constructor
+	 * Constructor for Faster Jackson
 	 */
-	Odds() {
+	@SuppressWarnings("unused")
+	private Odds() {
 	}
 	
 	/**
 	 * Construction with specific fractional odds
 	 * 
-	 * @param numerator
-	 * @param denominator
+	 * @param numerator The numerator element of the fractional odds
+	 * @param denominator The denominator element of the fractional odds
 	 */
 	public Odds(int numerator, int denominator) {
 

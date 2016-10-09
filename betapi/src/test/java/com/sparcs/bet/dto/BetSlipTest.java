@@ -12,7 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparcs.bet.BaseTest;
 
 /**
- * {@link SkyBetSlip} tests
+ * {@link BetSlip} tests
  *  
  * @author Lee Newfeld
  */

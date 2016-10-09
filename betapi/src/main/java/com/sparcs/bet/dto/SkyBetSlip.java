@@ -1,24 +1,24 @@
 package com.sparcs.bet.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 /**
  * Represents the taking of a {@link SkyBet bet}.
  * 
  * @author Lee Newfeld
  */
-@JsonPropertyOrder(alphabetic=true)
-public class SkyBetSlip {
+public class SkyBetSlip extends BetBase {
 
-	private int betId;
+	private static final long serialVersionUID = -7847002685472216046L;
+	
 	private Odds odds;
 	private int stake;
 
 	/**
-	 * Default Constructor
+	 * Constructor for Faster Jackson
 	 */
-	SkyBetSlip() {
+	@SuppressWarnings("unused")
+	private SkyBetSlip() {
+		
+		super();
 	}
 	
 	/**
@@ -30,38 +30,19 @@ public class SkyBetSlip {
 	 */
 	public SkyBetSlip(int betId, Odds odds, int stake) {
 
-		this.betId = betId;
+		super(betId);
+
 		this.odds = odds;
 		this.stake = stake;
 	}
-//
-//	/**
-//	 * Constructor
-//	 * 
-//	 * @param bet A {@link SkyBet} to place the bet on.
-//	 * @param stake The amount to put at risk.
-//	 */
-//	public SkyBetSlip(SkyBet bet, int stake) {
-//
-//		this(bet.getId(), bet.getOdds(), stake);
-//	}
 
 	/**
 	 * Constructor
 	 * @param slip
 	 */
 	public SkyBetSlip(BetSlip slip) {
-
-		this(slip.getBetId(), new Odds(slip.getOdds()), slip.getStake());
-	}
-
-	/**
-	 * @return The unique identifier of the {@link SkyBet bet} being taken.
-	 */
-	@JsonProperty("bet_id") 
-	public int getBetId() {
 		
-		return betId;
+		this(slip.getBetId(), new Odds(slip.getOdds()), slip.getStake());
 	}
 
 	/**
@@ -82,6 +63,6 @@ public class SkyBetSlip {
 
 	@Override
 	public String toString() {
-		return "SkyBetSlip [betId=" + betId + ", odds=" + odds + ", stake=" + stake + "]";
+		return "SkyBetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + stake + "]";
 	}
 }

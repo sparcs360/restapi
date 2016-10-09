@@ -8,13 +8,22 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * {@link Odds} tests
+ *  
+ * @author Lee Newfeld
+ */
 @RunWith(Parameterized.class)
 public class OddsTest {
+
+	protected static final Logger log = LoggerFactory.getLogger(OddsTest.class);
 
 	@Parameters(name = "{0}/{1}={2}")
 	public static Collection<Object[]> testdata() {
@@ -121,7 +130,7 @@ public class OddsTest {
 		Odds odds = new Odds(dec);
 		
 		if( odds.getDenominator() != den || odds.getNumerator() != num ) {
-			System.out.println(odds + " -> " + num + "/" + den + "=" + dec);
+			log.warn(odds + " -> " + num + "/" + den + "=" + dec);
 		}
 		
 		assertThat(odds.getDenominator(), is(den));

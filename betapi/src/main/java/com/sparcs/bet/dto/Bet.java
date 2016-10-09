@@ -2,22 +2,26 @@ package com.sparcs.bet.dto;
 
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 /**
  * Represents a Bet that a Customer can place a wager on.
  * 
  * @author Lee Newfeld
  */
-@JsonPropertyOrder(alphabetic=true)
-public class Bet {
+public final class Bet extends AvailableBetBase {
 
-	private int id;
-	private String eventName;
-	private String name;
+	private static final long serialVersionUID = -2952590949726157518L;
+	
 	private BigDecimal odds;
 	
+	/**
+	 * Constructor for Faster Jackson
+	 */
+	@SuppressWarnings("unused")
+	private Bet() {
+		
+		super();
+	}
+
 	/**
 	 * Constructor
 	 * 
@@ -28,11 +32,8 @@ public class Bet {
 	 */
 	Bet(int id, String eventName, String name, BigDecimal odds) {
 		
-		super();
+		super(id, eventName, name);
 		
-		this.id = id;
-		this.eventName = eventName;
-		this.name = name;
 		this.odds = odds;
 	}
 
@@ -41,38 +42,9 @@ public class Bet {
 	 */
 	public Bet(SkyBet skyBet) {
 
-		super();
+		super(skyBet.getBetId(), skyBet.getEventName(), skyBet.getName());
 		
-		id = skyBet.getId();
-		eventName = skyBet.getEventName();
-		name = skyBet.getName();
 		odds = skyBet.getOdds().getDecimalOdds();
-	}
-
-	/**
-	 * @return The unique id of the Bet
-	 */
-	@JsonProperty("bet_id")
-	public int getId() {
-		
-		return id;
-	}
-
-	/**
-	 * @return The name of the Event this Bet is associated with
-	 */
-	@JsonProperty("event")
-	public String getEventName() {
-		
-		return eventName;
-	}
-
-	/**
-	 * @return The name of the entity being Bet on
-	 */
-	public String getName() {
-		
-		return name;
 	}
 
 	/**
@@ -85,6 +57,9 @@ public class Bet {
 	
 	@Override
 	public String toString() {
-		return "SkyBet [id=" + id + ", eventName=" + eventName + ", name=" + name + ", odds=" + odds + "]";
+		return "SkyBet [id=" + getBetId() +
+			   ", eventName=" + getEventName() +
+			   ", name=" + getName() +
+			   ", odds=" + odds + "]";
 	}
 }
