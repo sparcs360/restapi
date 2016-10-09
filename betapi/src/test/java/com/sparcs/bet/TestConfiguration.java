@@ -1,4 +1,4 @@
-package com.sparcs;
+package com.sparcs.bet;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;

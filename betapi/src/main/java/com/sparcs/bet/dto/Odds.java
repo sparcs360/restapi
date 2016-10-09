@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,18 +21,19 @@ public class Odds {
 	private int denominator;
 
 	/**
-	 * Default Constructor
+	 * Constructor for Faster Jackson
 	 */
-	Odds() {
+	@SuppressWarnings("unused")
+	private Odds() {
 	}
 	
 	/**
 	 * Construction with specific fractional odds
 	 * 
-	 * @param numerator
-	 * @param denominator
+	 * @param numerator The numerator element of the fractional odds
+	 * @param denominator The denominator element of the fractional odds
 	 */
-	Odds(int numerator, int denominator) {
+	public Odds(int numerator, int denominator) {
 
 		this.numerator = numerator;
 		this.denominator = denominator;

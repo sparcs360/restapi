@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -18,7 +18,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import com.sparcs.BaseTest;
+import com.sparcs.bet.BaseTest;
+import com.sparcs.bet.dto.Odds;
+import com.sparcs.bet.dto.FractionalBet;
+import com.sparcs.bet.dto.FractionalBetReceipt;
+import com.sparcs.bet.dto.FractionalBetSlip;
 
 /**
  * {@link SkyBetServiceImpl} tests
@@ -33,46 +37,46 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
-		List<SkyBet> bets = skyBetService.getAvailable();
+		List<FractionalBet> bets = skyBetService.getAvailable();
 		assertThat(bets, notNullValue());
 		assertThat(bets, hasSize(6));
 		
-		assertThat(bets.get(0).getId(), is(1));
+		assertThat(bets.get(0).getBetId(), is(1));
 		assertThat(bets.get(0).getEventName(), is("World Cup 2018"));
 		assertThat(bets.get(0).getName(), is("England"));
 		assertThat(bets.get(0).getOdds().getNumerator(), is(10));
 		assertThat(bets.get(0).getOdds().getDenominator(), is(1));
 		assertThat(bets.get(0).getOdds().getDecimalOdds().doubleValue(), is(11.0));
 		
-		assertThat(bets.get(1).getId(), is(2));
+		assertThat(bets.get(1).getBetId(), is(2));
 		assertThat(bets.get(1).getEventName(), is("World Cup 2018"));
 		assertThat(bets.get(1).getName(), is("Brazil"));
 		assertThat(bets.get(1).getOdds().getNumerator(), is(1));
 		assertThat(bets.get(1).getOdds().getDenominator(), is(1));
 		assertThat(bets.get(1).getOdds().getDecimalOdds().doubleValue(), is(2.0));
 
-		assertThat(bets.get(2).getId(), is(3));
+		assertThat(bets.get(2).getBetId(), is(3));
 		assertThat(bets.get(2).getEventName(), is("World Cup 2018"));
 		assertThat(bets.get(2).getName(), is("Spain"));
 		assertThat(bets.get(2).getOdds().getNumerator(), is(3));
 		assertThat(bets.get(2).getOdds().getDenominator(), is(1));
 		assertThat(bets.get(2).getOdds().getDecimalOdds().doubleValue(), is(4.0));
 
-		assertThat(bets.get(3).getId(), is(4));
+		assertThat(bets.get(3).getBetId(), is(4));
 		assertThat(bets.get(3).getEventName(), is("Next General Election"));
 		assertThat(bets.get(3).getName(), is("Labour"));
 		assertThat(bets.get(3).getOdds().getNumerator(), is(7));
 		assertThat(bets.get(3).getOdds().getDenominator(), is(4));
 		assertThat(bets.get(3).getOdds().getDecimalOdds().doubleValue(), is(2.75));
 
-		assertThat(bets.get(4).getId(), is(5));
+		assertThat(bets.get(4).getBetId(), is(5));
 		assertThat(bets.get(4).getEventName(), is("Next General Election"));
 		assertThat(bets.get(4).getName(), is("Conservatives"));
 		assertThat(bets.get(4).getOdds().getNumerator(), is(2));
 		assertThat(bets.get(4).getOdds().getDenominator(), is(1));
 		assertThat(bets.get(4).getOdds().getDecimalOdds().doubleValue(), is(3.0));
 
-		assertThat(bets.get(5).getId(), is(6));
+		assertThat(bets.get(5).getBetId(), is(6));
 		assertThat(bets.get(5).getEventName(), is("Next General Election"));
 		assertThat(bets.get(5).getName(), is("Liberal Democrats"));
 		assertThat(bets.get(5).getOdds().getNumerator(), is(17));
@@ -83,11 +87,11 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldGetReceiptForValidBet() {
 
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 100);
-		SkyBetReceipt receipt = skyBetService.placeBet(slip);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(10, 1), 100);
+		FractionalBetReceipt receipt = skyBetService.placeBet(slip);
 		
 		assertThat(receipt, notNullValue());
-		assertThat(receipt.getBet().getId(), is(slip.getBetId()));
+		assertThat(receipt.getBet().getBetId(), is(slip.getBetId()));
 		assertThat(receipt.getBet().getOdds(), is(slip.getOdds()));
 		assertThat(receipt.getStake(), is(slip.getStake()));
 		assertThat(receipt.getTransactionId(), greaterThan(0));
@@ -98,7 +102,7 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForZeroStake() {
 
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 0);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(10, 1), 0);
 		
     	// Note: The Sky API allows a zero stake.
 		//       SkyBetServiceImpl traps this condition and returns a 418.
@@ -115,7 +119,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForNonExistentBetId() {
 
 		// No such bet with Id #999
-		SkyBetSlip slip = new SkyBetSlip(999, new Odds(10, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(999, new Odds(10, 1), 100);
 
 		shouldntGetReceiptForNonExistentBetIdException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForNonExistentBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
@@ -130,7 +134,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForZeroBetId() {
 
 		// No such bet with Id #0
-		SkyBetSlip slip = new SkyBetSlip(0, new Odds(10, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(0, new Odds(10, 1), 100);
 		
     	// Note: The Sky API throws an HTTP 500 if bet_id <= 0.
 		//       SkyBetServiceImpl traps this condition and returns a 418.
@@ -147,7 +151,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForNegativeBetId() {
 
 		// No such bet with Id #-1
-		SkyBetSlip slip = new SkyBetSlip(-1, new Odds(10, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(-1, new Odds(10, 1), 100);
 		
     	// Note: The Sky API throws an HTTP 500 if bet_id <= 0.
 		//       SkyBetServiceImpl traps this condition and returns a 418.
@@ -164,7 +168,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForInvalidOdds() {
 
 		// Odds don't match current odds
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(100, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(100, 1), 100);
 
 		shouldntGetReceiptForInvalidOddsException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForInvalidOddsException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
@@ -178,7 +182,7 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForNegativeStake() {
 
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), -100);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(10, 1), -100);
 		
 		shouldntGetReceiptForNegativeStakeException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForNegativeStakeException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));

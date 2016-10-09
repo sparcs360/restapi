@@ -9,7 +9,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.sparcs" level="TRACE" additivity="false">
+	<logger name="com.sparcs" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 

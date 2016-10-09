@@ -1,8 +1,10 @@
-package com.sparcs.betapi.internal;
+package com.sparcs.bet.api.internal;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import com.sparcs.betapi.Bet;
-import com.sparcs.betapi.BetController;
-import com.sparcs.betapi.BetReceipt;
-import com.sparcs.betapi.BetSlip;
-import com.sparcs.betapi.SkyBetReceipt;
-import com.sparcs.betapi.SkyBetService;
-import com.sparcs.betapi.SkyBetSlip;
+import com.sparcs.bet.api.BetController;
+import com.sparcs.bet.api.SkyBetService;
+import com.sparcs.bet.dto.DecimalBet;
+import com.sparcs.bet.dto.DecimalBetReceipt;
+import com.sparcs.bet.dto.DecimalBetSlip;
+import com.sparcs.bet.dto.FractionalBetReceipt;
+import com.sparcs.bet.dto.FractionalBetSlip;
 
 /**
  * Implementation of {@link BetController}.
@@ -36,7 +38,7 @@ class BetControllerImpl implements BetController {
 	private static final Logger log = LoggerFactory.getLogger(BetControllerImpl.class);
 
 	/**
-	 * Exception thrown if {@link BetSlip} is only partially "filled in" (i.e.,
+	 * Exception thrown if {@link DecimalBetSlip} is only partially "filled in" (i.e.,
 	 * the Json provided by the caller didn't deserialise to a complete object - e.g.,
 	 * The <code>bet_id</code> and <code>stake</code> are present, but the
 	 * <code>odds</code> are missing). 
@@ -91,6 +93,34 @@ class BetControllerImpl implements BetController {
 	}
 
 	/* (non-Javadoc)
+	 * @see com.sparcs.betapi.BetController#getReadMe()
+	 */
+	@Override
+	@RequestMapping(
+		path="",
+		method={RequestMethod.GET},
+		produces={MediaType.TEXT_PLAIN_VALUE}
+	)
+    public String getReadMe() {
+
+		log.trace("+getReadMe");
+
+    	try {
+    		
+			return IOUtils.toString(getClass().getResourceAsStream("/README.txt"));
+			
+		} catch (IOException e) {
+
+			log.error("Failed to get README.txt resource", e);
+			return "Not available";
+			
+		} finally {
+			
+			log.trace("-getReadMe");
+		}
+    }
+
+	/* (non-Javadoc)
 	 * @see com.sparcs.betapi.BetController#getAvailable()
 	 */
 	@Override
@@ -99,13 +129,24 @@ class BetControllerImpl implements BetController {
 		method={RequestMethod.GET},
 		produces={MediaType.APPLICATION_JSON_UTF8_VALUE}
 	)
-	public @ResponseBody List<Bet> getAvailable() {
+	public @ResponseBody List<DecimalBet> getAvailable() {
 
-		// Convert available bets from Sky to our betting format
-		return skyBetService.getAvailable()
-			.stream()
-			.map(sb -> new Bet(sb))	// Use a mapper instead?
-			.collect(Collectors.toList());
+		log.trace("+getAvailable");
+
+		try {
+			
+			// Convert available bets from Sky to our betting format
+			return skyBetService.getAvailable()
+				.stream()
+				.peek(fractionalBet -> log.debug(fractionalBet.toString()))
+				.map(fractionalBet -> new DecimalBet(fractionalBet))
+				.peek(decimalBet -> log.debug(decimalBet.toString()))
+				.collect(Collectors.toList());
+		
+		} finally {
+			
+			log.trace("-getAvailable");
+		}
 	}
 
 	/* (non-Javadoc)
@@ -118,24 +159,37 @@ class BetControllerImpl implements BetController {
 		consumes={MediaType.APPLICATION_JSON_UTF8_VALUE},
 		produces={MediaType.APPLICATION_JSON_UTF8_VALUE}
 	)
-	public @ResponseBody BetReceipt placeBet(@RequestBody BetSlip slip) {
+	public @ResponseBody DecimalBetReceipt placeBet(@RequestBody DecimalBetSlip slip) {
 
-		log.trace("slip={}", slip);
+		log.trace("+placeBet");
 		
-		// Treat empty or partially completed slips as a
-		// "Message Not Readable" problem
-		if( !slip.isComplete() ) {
+		try {
 			
-			throw INCOMPLETE_SLIP_EXCEPTION;
+			log.debug("slip={}", slip);
+			
+			// Treat empty or partially completed slips as a
+			// "Message Not Readable" problem
+			if( !slip.isComplete() ) {
+				
+				throw INCOMPLETE_SLIP_EXCEPTION;
+			}
+			
+			// Create a Sky betting slip based on ours
+			FractionalBetSlip skySlip = new FractionalBetSlip(slip);
+			log.debug("skySlip={}", skySlip);
+	
+			// Place the bet with Sky
+			FractionalBetReceipt skyReceipt = skyBetService.placeBet(skySlip);
+			log.debug("skyReceipt={}", skyReceipt);
+			
+			// Return our receipt based on Sky's
+			DecimalBetReceipt receipt = new DecimalBetReceipt(skyReceipt);
+			log.debug("receipt={}", receipt);
+			return receipt;
+			
+		} finally {
+			
+			log.trace("-placeBet");
 		}
-		
-		// Create a Sky betting slip based on ours
-		SkyBetSlip skySlip = new SkyBetSlip(slip);
-
-		// Place the bet with Sky
-		SkyBetReceipt receipt = skyBetService.placeBet(skySlip);
-		
-		// Return our receipt based on Sky's
-		return new BetReceipt(receipt);
 	}
 }

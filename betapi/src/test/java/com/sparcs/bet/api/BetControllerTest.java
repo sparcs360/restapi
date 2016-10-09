@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -9,7 +9,8 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-import com.sparcs.BaseTest;
+import com.sparcs.bet.BaseTest;
+import com.sparcs.bet.dto.DecimalBetSlip;
 
 /**
  * {@link BetControllerImpl} tests
@@ -22,7 +23,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
         mvc.perform(get("/available"))
-           .andDo(debugLog())
+           .andDo(traceLog())
            .andExpect(status().isOk())
            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
            .andExpect(jsonPath("$", hasSize(6)))
@@ -57,11 +58,11 @@ public class BetControllerTest extends BaseTest {
 	public void shouldGetReceiptForValidBet() throws Exception {
 
 		// Create valid betting slip
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
            .andExpect(status().isOk())
            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
            .andExpect(jsonPath("$.bet_id", is(1)))
@@ -78,7 +79,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content(""))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -90,7 +91,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("{}"))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -102,7 +103,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("{ \"bet_id\": 1 }"))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -114,7 +115,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("\"xxx\": \"yyy\""))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -125,11 +126,11 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForNonExistentBetId() throws Exception {
 
 		// No such bet with Id #999
-		BetSlip slip = new BetSlip(999, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(999, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
@@ -140,11 +141,11 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForZeroBetId() throws Exception {
 
 		// No such bet with Id #0
-		BetSlip slip = new BetSlip(0, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(0, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
@@ -155,11 +156,11 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForNegativeBetId() throws Exception {
 
 		// No such bet with Id #-1
-		BetSlip slip = new BetSlip(-1, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(-1, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
@@ -170,11 +171,11 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForInvalidOdds() throws Exception {
 
 		// Odds don't match current odds
-		BetSlip slip = new BetSlip(1, new BigDecimal(101), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(101), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Incorrect Odds")))
@@ -184,12 +185,12 @@ public class BetControllerTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForZeroStake() throws Exception {
 
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), 0);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), 0);
 
     	// Note: BetControllerImpl doesn't allow zero stakes but the Sky API it delegates to does.
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
@@ -199,14 +200,25 @@ public class BetControllerTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForNegativeStake() throws Exception {
 
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), -100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), -100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
 		   ;
+	}
+	
+	@Test
+	public void shouldGetREADME() throws Exception {
+		
+        mvc.perform(get("/"))
+	       .andDo(traceLog())
+	       .andExpect(status().isOk())
+	       .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
+	       .andExpect(content().string(startsWith("GET /available")))
+	       ;
 	}
 }

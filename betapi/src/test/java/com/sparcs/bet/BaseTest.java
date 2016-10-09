@@ -1,4 +1,4 @@
-package com.sparcs;
+package com.sparcs.bet;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
@@ -31,7 +31,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sparcs.betapi.SkyBetServiceTest;
 
 /**
 *  
@@ -55,7 +54,7 @@ import com.sparcs.betapi.SkyBetServiceTest;
 )
 public abstract class BaseTest {
 
-	protected static final Logger log = LoggerFactory.getLogger(SkyBetServiceTest.class);
+	protected static final Logger log = LoggerFactory.getLogger(BaseTest.class);
 
     @Autowired
     protected WebApplicationContext webApplicationContext;
@@ -94,7 +93,7 @@ public abstract class BaseTest {
      * @return A MockMvc {@link ResultHandler} that writes the
      * {@link MvcResult} to our test {@link #log}.
      */
-	public static ResultHandler debugLog() {
+	public static ResultHandler traceLog() {
 
 		return new LoggingResultHandler();
 	}
@@ -106,12 +105,12 @@ public abstract class BaseTest {
 
 		@Override
 		public void handle(MvcResult result) throws Exception {
-			if (log.isDebugEnabled()) {
+			if (log.isTraceEnabled()) {
 				StringWriter stringWriter = new StringWriter();
 				ResultHandler printingResultHandler =
 						new PrintWriterPrintingResultHandler(new PrintWriter(stringWriter));
 				printingResultHandler.handle(result);
-				log.debug("MvcResult details:\n" + stringWriter);
+				log.trace("MvcResult details:\n" + stringWriter);
 			}
 		}
 	}

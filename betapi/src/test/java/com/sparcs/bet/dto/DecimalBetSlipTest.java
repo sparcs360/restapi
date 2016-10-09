@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -9,14 +9,14 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparcs.BaseTest;
+import com.sparcs.bet.BaseTest;
 
 /**
- * {@link SkyBetSlip} tests
+ * {@link DecimalBetSlip} tests
  *  
  * @author Lee Newfeld
  */
-public class BetSlipTest extends BaseTest {
+public class DecimalBetSlipTest extends BaseTest {
 
 	private static final String JSON_VALID = "{ \"bet_id\": 1, \"odds\": 11.0, \"stake\": 100}";
 	private static final String JSON_INCOMPLETE = "{ \"bet_id\": 1 }";
@@ -24,7 +24,7 @@ public class BetSlipTest extends BaseTest {
 	@Test
 	public void shouldSerialiseToExpectedJson() throws JsonProcessingException {
 
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), 100);
 		String actualJson = prettyPrint(slip);
 		JSONAssert.assertEquals(JSON_VALID, actualJson, true);
 	}
@@ -32,7 +32,7 @@ public class BetSlipTest extends BaseTest {
 	@Test
 	public void shouldDeserialiseFromExpectedJson() throws Exception {
 		
-		BetSlip slip = jsonMapper.readValue(JSON_VALID, BetSlip.class);
+		DecimalBetSlip slip = jsonMapper.readValue(JSON_VALID, DecimalBetSlip.class);
 		assertThat(slip, notNullValue());
 		assertThat(slip.getBetId(), is(1));
 		assertThat(slip.getOdds().doubleValue(), is(11.0));
@@ -42,14 +42,14 @@ public class BetSlipTest extends BaseTest {
 	@Test
 	public void shouldBeCompleteWhenDeserialiseFromValidJson() throws Exception {
 		
-		BetSlip slip = jsonMapper.readValue(JSON_VALID, BetSlip.class);
+		DecimalBetSlip slip = jsonMapper.readValue(JSON_VALID, DecimalBetSlip.class);
 		assertThat(slip.isComplete(), is(true));
 	}
 
 	@Test
 	public void shouldntBeCompleteWhenDeserialiseFromIncompleteJson() throws Exception {
 		
-		BetSlip slip = jsonMapper.readValue(JSON_INCOMPLETE, BetSlip.class);
+		DecimalBetSlip slip = jsonMapper.readValue(JSON_INCOMPLETE, DecimalBetSlip.class);
 		assertThat(slip.isComplete(), is(false));
 	}
 }
