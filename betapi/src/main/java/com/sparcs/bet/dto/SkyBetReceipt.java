@@ -2,6 +2,7 @@ package com.sparcs.bet.dto;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.sparcs.bet.api.SkyBetService;
+import com.sparcs.bet.dto.base.ReceiptBase;
 
 /**
  * A digital receipt obtained by successfully

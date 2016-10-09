@@ -1,4 +1,4 @@
-package com.sparcs.bet.dto;
+package com.sparcs.bet.dto.base;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  */
 @SuppressWarnings("serial")
 @JsonPropertyOrder(alphabetic=true)
-abstract class BetBase implements Serializable {
+public abstract class BetBase implements Serializable {
 
 	@JsonProperty("bet_id")
 	private int id;

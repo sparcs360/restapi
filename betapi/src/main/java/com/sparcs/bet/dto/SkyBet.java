@@ -1,7 +1,9 @@
 package com.sparcs.bet.dto;
 
+import com.sparcs.bet.dto.base.AvailableBetBase;
+
 /**
- * Represents an object in the array returned by http://skybettechtestapi.herokuapp.com/available
+ * Represents an available bet expressed using fractional odds.
  * 
  * @author Lee Newfeld
  */

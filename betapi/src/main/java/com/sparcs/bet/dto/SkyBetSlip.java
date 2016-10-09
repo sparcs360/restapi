@@ -1,17 +1,18 @@
 package com.sparcs.bet.dto;
 
+import com.sparcs.bet.dto.base.BettingSlipBase;
+
 /**
- * Represents the taking of a {@link SkyBet bet}.
+ * Represents a betting slip with fractional odds.
  * 
  * @author Lee Newfeld
  */
-public class SkyBetSlip extends BetBase {
+public final class SkyBetSlip extends BettingSlipBase {
 
 	private static final long serialVersionUID = -7847002685472216046L;
 	
 	private Odds odds;
-	private int stake;
-
+	
 	/**
 	 * Constructor for Faster Jackson
 	 */
@@ -30,15 +31,16 @@ public class SkyBetSlip extends BetBase {
 	 */
 	public SkyBetSlip(int betId, Odds odds, int stake) {
 
-		super(betId);
+		super(betId, stake);
 
 		this.odds = odds;
-		this.stake = stake;
 	}
 
 	/**
-	 * Constructor
-	 * @param slip
+	 * Construct a betting slip with fractional odds based on a betting slip
+	 * with decimal odds.
+	 *  
+	 * @param slip The {@link BetSlip} to base this betting slip on.
 	 */
 	public SkyBetSlip(BetSlip slip) {
 		
@@ -52,17 +54,10 @@ public class SkyBetSlip extends BetBase {
 		
 		return odds;
 	}
-	
-	/**
-	 * @return The amount at risk.
-	 */
-	public int getStake() {
-		
-		return stake;
-	}
+
 
 	@Override
 	public String toString() {
-		return "SkyBetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + stake + "]";
+		return "SkyBetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + getStake() + "]";
 	}
 }

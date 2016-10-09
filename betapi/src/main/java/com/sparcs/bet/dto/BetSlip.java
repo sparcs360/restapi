@@ -3,18 +3,18 @@ package com.sparcs.bet.dto;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sparcs.bet.dto.base.BettingSlipBase;
 
 /**
- * Represents a betting slip
+ * Represents a betting slip with decimal odds
  * 
  * @author Lee Newfeld
  */
-public final class BetSlip extends BetBase {
+public final class BetSlip extends BettingSlipBase {
 
 	private static final long serialVersionUID = -8986042172060371020L;
 	
 	private BigDecimal odds;
-	private int stake;
 
 	/**
 	 * Constructor for Faster Jackson
@@ -34,10 +34,9 @@ public final class BetSlip extends BetBase {
 	 */
 	public BetSlip(int betId, BigDecimal odds, int stake) {
 
-		super(betId);
+		super(betId, stake);
 		
 		this.odds = odds;
-		this.stake = stake;
 	}
 
 	/**
@@ -46,14 +45,6 @@ public final class BetSlip extends BetBase {
 	public BigDecimal getOdds() {
 		
 		return odds;
-	}
-	
-	/**
-	 * @return The amount at risk
-	 */
-	public int getStake() {
-		
-		return stake;
 	}
 
 	/**
@@ -67,6 +58,6 @@ public final class BetSlip extends BetBase {
 
 	@Override
 	public String toString() {
-		return "BetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + stake + "]";
+		return "BetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + getStake() + "]";
 	}
 }

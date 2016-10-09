@@ -1,4 +1,4 @@
-package com.sparcs.bet.dto;
+package com.sparcs.bet.dto.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Lee Newfeld
  */
 @SuppressWarnings("serial")
-abstract class AvailableBetBase extends BetBase {
+public abstract class AvailableBetBase extends BetBase {
 
 	private String eventName;
 	private String name;

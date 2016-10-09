@@ -2,8 +2,10 @@ package com.sparcs.bet.dto;
 
 import java.math.BigDecimal;
 
+import com.sparcs.bet.dto.base.AvailableBetBase;
+
 /**
- * Represents a Bet that a Customer can place a wager on.
+ * Represents an available bet expressed using decimal odds.
  * 
  * @author Lee Newfeld
  */

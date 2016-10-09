@@ -1,4 +1,4 @@
-package com.sparcs.bet.dto;
+package com.sparcs.bet.dto.base;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Lee Newfeld
  */
 @SuppressWarnings("serial")
-abstract class ReceiptBase implements Serializable {
+public abstract class ReceiptBase implements Serializable {
 
 	private int stake;
 	private int transactionId;
