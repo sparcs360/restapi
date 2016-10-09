@@ -20,34 +20,38 @@ import com.sparcs.BaseTest;
  */
 public class BetSlipTest extends BaseTest {
 
-	private static final Logger log = LoggerFactory.getLogger(BetSlipTest.class);
-
-	private static final String JSON = "{ \"bet_id\": 1, \"odds\": 11.0, \"stake\": 100}";
+	private static final String JSON_VALID = "{ \"bet_id\": 1, \"odds\": 11.0, \"stake\": 100}";
+	private static final String JSON_INCOMPLETE = "{ \"bet_id\": 1 }";
 
 	@Test
 	public void shouldSerialiseToExpectedJson() throws JsonProcessingException {
 
-		log.trace("+shouldSerialiseToExpectedJson");
-
 		BetSlip slip = new BetSlip(1, new BigDecimal(11), 100);
 		String actualJson = prettyPrint(slip);
-		log.trace("actualJson={}", actualJson);
-		JSONAssert.assertEquals(JSON, actualJson, true);
-
-		log.trace("-shouldSerialiseToExpectedJson");
+		JSONAssert.assertEquals(JSON_VALID, actualJson, true);
 	}
 	
 	@Test
 	public void shouldDeserialiseFromExpectedJson() throws Exception {
 		
-		log.trace("+shouldDeserialiseFromExpectedJson");
-
-		BetSlip slip = jsonMapper.readValue(JSON, BetSlip.class);
+		BetSlip slip = jsonMapper.readValue(JSON_VALID, BetSlip.class);
 		assertThat(slip, notNullValue());
 		assertThat(slip.getBetId(), is(1));
 		assertThat(slip.getOdds().doubleValue(), is(11.0));
 		assertThat(slip.getStake(), is(100));
+	}
 
-		log.trace("-shouldDeserialiseFromExpectedJson");
+	@Test
+	public void shouldBeCompleteWhenDeserialiseFromValidJson() throws Exception {
+		
+		BetSlip slip = jsonMapper.readValue(JSON_VALID, BetSlip.class);
+		assertThat(slip.isComplete(), is(true));
+	}
+
+	@Test
+	public void shouldntBeCompleteWhenDeserialiseFromIncompleteJson() throws Exception {
+		
+		BetSlip slip = jsonMapper.readValue(JSON_INCOMPLETE, BetSlip.class);
+		assertThat(slip.isComplete(), is(false));
 	}
 }

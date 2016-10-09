@@ -2,6 +2,7 @@ package com.sparcs.betapi;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import org.apache.commons.math3.fraction.Fraction;
 
@@ -43,6 +44,8 @@ public class Odds {
 	 * @param odds Decimal odds
 	 */
 	public Odds(BigDecimal odds) {
+
+		Objects.requireNonNull(odds, "odds cannot be null");
 
 		Fraction fraction = new Fraction(odds.doubleValue() - 1, 0.005, 100);
 		numerator = fraction.getNumerator();

@@ -75,7 +75,7 @@ public class BetControllerTest extends BaseTest {
 	}
 	
 	@Test
-	public void shouldntGetReceiptWhenRequestIsEmpty() throws Exception {
+	public void shouldntGetReceiptWhenRequestIsEmptyString() throws Exception {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content(""))
@@ -87,10 +87,34 @@ public class BetControllerTest extends BaseTest {
 	}
 
 	@Test
-	public void shouldntGetReceiptWhenRequestIsMalformed() throws Exception {
+	public void shouldntGetReceiptWhenRequestIsEmptyObject() throws Exception {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
-								 .content("xxx: \"yyy\""))
+								 .content("{}"))
+		   .andDo(print())
+		   .andExpect(status().isBadRequest())
+		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
+		   ;
+	}
+
+	@Test
+	public void shouldntGetReceiptWhenRequestIsPartialObject() throws Exception {
+
+		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
+								 .content("{ \"bet_id\": 1 }"))
+		   .andDo(print())
+		   .andExpect(status().isBadRequest())
+		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
+		   ;
+	}
+
+	@Test
+	public void shouldntGetReceiptWhenRequestIsMalformedObject() throws Exception {
+
+		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
+								 .content("\"xxx\": \"yyy\""))
 		   .andDo(print())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))

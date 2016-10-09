@@ -35,6 +35,15 @@ class BetControllerImpl implements BetController {
 
 	private static final Logger log = LoggerFactory.getLogger(BetControllerImpl.class);
 
+	/**
+	 * Exception thrown if {@link BetSlip} is only partially "filled in" (i.e.,
+	 * the Json provided by the caller didn't deserialise to a complete object - e.g.,
+	 * The <code>bet_id</code> and <code>stake</code> are present, but the
+	 * <code>odds</code> are missing). 
+	 */
+	private static final HttpMessageNotReadableException INCOMPLETE_SLIP_EXCEPTION =
+			new HttpMessageNotReadableException("Slip is incomplete");
+
 	@Autowired
 	private SkyBetService skyBetService;
 	
@@ -113,10 +122,20 @@ class BetControllerImpl implements BetController {
 
 		log.trace("slip={}", slip);
 		
-		// Place the bet (with Sky)
+		// Treat empty or partially completed slips as a
+		// "Message Not Readable" problem
+		if( !slip.isComplete() ) {
+			
+			throw INCOMPLETE_SLIP_EXCEPTION;
+		}
+		
+		// Create a Sky betting slip based on ours
 		SkyBetSlip skySlip = new SkyBetSlip(slip);
 
+		// Place the bet with Sky
 		SkyBetReceipt receipt = skyBetService.placeBet(skySlip);
+		
+		// Return our receipt based on Sky's
 		return new BetReceipt(receipt);
 	}
 }

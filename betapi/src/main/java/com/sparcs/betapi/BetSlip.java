@@ -3,6 +3,7 @@ package com.sparcs.betapi;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -56,6 +57,15 @@ public class BetSlip implements Serializable {
 	public int getStake() {
 		
 		return stake;
+	}
+
+	/**
+	 * @return true if a value for all mandatory properties have been provided.
+	 */
+	@JsonIgnore
+	public boolean isComplete() {
+
+		return odds != null;
 	}
 
 	@Override
