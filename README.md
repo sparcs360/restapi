@@ -1,5 +1,5 @@
 # restapi
-![](https://img.shields.io/badge/release-0.0.1--RELEASE-green.svg)
+![](https://img.shields.io/badge/release-0.0.2--SNAPSHOT-green.svg)
 
 A simple REST API built with Java 8 on top of the [Spring Framework](https://spring.io/).
 
