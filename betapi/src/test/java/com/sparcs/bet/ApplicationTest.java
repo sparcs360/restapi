@@ -11,9 +11,5 @@ public class ApplicationTest extends BaseTest {
 
 	@Test
 	public void shouldLoadContext() {
-		
-		log.trace("+shouldLoadContext");
-
-		log.trace("-shouldLoadContext");
 	}
 }

@@ -40,13 +40,22 @@ class SkyBetServiceImpl implements SkyBetService {
     @Override
 	public List<FractionalBet> getAvailable() {
 
-		// Get the master list of Bets from Sky... 
-		ResponseEntity<List<FractionalBet>> response =
-		        restClient.exchange(URL_AVAILABLE,
-		                    HttpMethod.GET, null, new ParameterizedTypeReference<List<FractionalBet>>() {});
-    	log.trace(response.toString());
+    	log.trace("+getAvailable");
 
-		return response.getBody();
+		// Get the master list of Bets from Sky...
+    	try {
+    		
+			ResponseEntity<List<FractionalBet>> response =
+			        restClient.exchange(URL_AVAILABLE,
+			                    HttpMethod.GET, null, new ParameterizedTypeReference<List<FractionalBet>>() {});
+	    	log.debug("response={}", response);
+	
+			return response.getBody();
+			
+    	} finally {
+    		
+        	log.trace("-getAvailable");
+    	}
     }
 
     /* (non-Javadoc)
@@ -55,26 +64,35 @@ class SkyBetServiceImpl implements SkyBetService {
     @Override
 	public FractionalBetReceipt placeBet(FractionalBetSlip slip) {
 
-    	log.trace("slip={}", slip.toString());
-
-    	// Sky API throws a HTTP 500 if bet_id <= 0.  Let's trap that condition
-		// and return a more relevant error
-		if( slip.getBetId() < 1 ) {
-			
-			throw SkyBetException.INVALID_BET_ID;
-		}
-    	// Sky API will allow a bet with zero stake to be taken.  We don't want
-		// that.
-    	if( slip.getStake() == 0 ) {
-
-    		throw SkyBetException.INVALID_STAKE;
-    	}
-
-    	// POST the slip to SkyBet
-    	ResponseEntity<FractionalBetReceipt> response =
-    			restClient.postForEntity(URL_BETS, slip, FractionalBetReceipt.class);
-    	log.trace(response.toString());
+    	log.trace("+placeBet");
     	
-		return response.getBody();
+    	try {
+    	
+	    	log.debug("slip={}", slip.toString());
+	
+	    	// Sky API throws a HTTP 500 if bet_id <= 0.  Let's trap that condition
+			// and return a more relevant error
+			if( slip.getBetId() < 1 ) {
+				
+				throw SkyBetException.INVALID_BET_ID;
+			}
+	    	// Sky API will allow a bet with zero stake to be taken.  We don't want
+			// that.
+	    	if( slip.getStake() == 0 ) {
+	
+	    		throw SkyBetException.INVALID_STAKE;
+	    	}
+	
+	    	// POST the slip to SkyBet
+	    	ResponseEntity<FractionalBetReceipt> response =
+	    			restClient.postForEntity(URL_BETS, slip, FractionalBetReceipt.class);
+	    	log.debug("response={}", response);
+	    	
+			return response.getBody();
+
+    	} finally {
+
+    		log.trace("-placeBet");
+    	}
     }
 }

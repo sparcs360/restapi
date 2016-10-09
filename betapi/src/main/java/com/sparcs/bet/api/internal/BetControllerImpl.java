@@ -102,7 +102,9 @@ class BetControllerImpl implements BetController {
 		produces={MediaType.TEXT_PLAIN_VALUE}
 	)
     public String getReadMe() {
-    	
+
+		log.trace("+getReadMe");
+
     	try {
     		
 			return IOUtils.toString(getClass().getResourceAsStream("/README.txt"));
@@ -111,6 +113,10 @@ class BetControllerImpl implements BetController {
 
 			log.error("Failed to get README.txt resource", e);
 			return "Not available";
+			
+		} finally {
+			
+			log.trace("-getReadMe");
 		}
     }
 
@@ -125,11 +131,22 @@ class BetControllerImpl implements BetController {
 	)
 	public @ResponseBody List<DecimalBet> getAvailable() {
 
-		// Convert available bets from Sky to our betting format
-		return skyBetService.getAvailable()
-			.stream()
-			.map(fractionalBet -> new DecimalBet(fractionalBet))
-			.collect(Collectors.toList());
+		log.trace("+getAvailable");
+
+		try {
+			
+			// Convert available bets from Sky to our betting format
+			return skyBetService.getAvailable()
+				.stream()
+				.peek(fractionalBet -> log.debug(fractionalBet.toString()))
+				.map(fractionalBet -> new DecimalBet(fractionalBet))
+				.peek(decimalBet -> log.debug(decimalBet.toString()))
+				.collect(Collectors.toList());
+		
+		} finally {
+			
+			log.trace("-getAvailable");
+		}
 	}
 
 	/* (non-Javadoc)
@@ -144,22 +161,35 @@ class BetControllerImpl implements BetController {
 	)
 	public @ResponseBody DecimalBetReceipt placeBet(@RequestBody DecimalBetSlip slip) {
 
-		log.trace("slip={}", slip);
+		log.trace("+placeBet");
 		
-		// Treat empty or partially completed slips as a
-		// "Message Not Readable" problem
-		if( !slip.isComplete() ) {
+		try {
 			
-			throw INCOMPLETE_SLIP_EXCEPTION;
+			log.debug("slip={}", slip);
+			
+			// Treat empty or partially completed slips as a
+			// "Message Not Readable" problem
+			if( !slip.isComplete() ) {
+				
+				throw INCOMPLETE_SLIP_EXCEPTION;
+			}
+			
+			// Create a Sky betting slip based on ours
+			FractionalBetSlip skySlip = new FractionalBetSlip(slip);
+			log.debug("skySlip={}", skySlip);
+	
+			// Place the bet with Sky
+			FractionalBetReceipt skyReceipt = skyBetService.placeBet(skySlip);
+			log.debug("skyReceipt={}", skyReceipt);
+			
+			// Return our receipt based on Sky's
+			DecimalBetReceipt receipt = new DecimalBetReceipt(skyReceipt);
+			log.debug("receipt={}", receipt);
+			return receipt;
+			
+		} finally {
+			
+			log.trace("-placeBet");
 		}
-		
-		// Create a Sky betting slip based on ours
-		FractionalBetSlip skySlip = new FractionalBetSlip(slip);
-
-		// Place the bet with Sky
-		FractionalBetReceipt receipt = skyBetService.placeBet(skySlip);
-		
-		// Return our receipt based on Sky's
-		return new DecimalBetReceipt(receipt);
 	}
 }

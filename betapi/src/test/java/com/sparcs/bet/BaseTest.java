@@ -93,7 +93,7 @@ public abstract class BaseTest {
      * @return A MockMvc {@link ResultHandler} that writes the
      * {@link MvcResult} to our test {@link #log}.
      */
-	public static ResultHandler debugLog() {
+	public static ResultHandler traceLog() {
 
 		return new LoggingResultHandler();
 	}
@@ -105,12 +105,12 @@ public abstract class BaseTest {
 
 		@Override
 		public void handle(MvcResult result) throws Exception {
-			if (log.isDebugEnabled()) {
+			if (log.isTraceEnabled()) {
 				StringWriter stringWriter = new StringWriter();
 				ResultHandler printingResultHandler =
 						new PrintWriterPrintingResultHandler(new PrintWriter(stringWriter));
 				printingResultHandler.handle(result);
-				log.debug("MvcResult details:\n" + stringWriter);
+				log.trace("MvcResult details:\n" + stringWriter);
 			}
 		}
 	}

@@ -23,7 +23,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
         mvc.perform(get("/available"))
-           .andDo(debugLog())
+           .andDo(traceLog())
            .andExpect(status().isOk())
            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
            .andExpect(jsonPath("$", hasSize(6)))
@@ -62,7 +62,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
            .andExpect(status().isOk())
            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
            .andExpect(jsonPath("$.bet_id", is(1)))
@@ -79,7 +79,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content(""))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -91,7 +91,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("{}"))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -103,7 +103,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("{ \"bet_id\": 1 }"))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -115,7 +115,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("\"xxx\": \"yyy\""))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isBadRequest())
 		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
 		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
@@ -130,7 +130,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
@@ -145,7 +145,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
@@ -160,7 +160,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
@@ -175,7 +175,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Incorrect Odds")))
@@ -190,7 +190,7 @@ public class BetControllerTest extends BaseTest {
     	// Note: BetControllerImpl doesn't allow zero stakes but the Sky API it delegates to does.
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
@@ -204,7 +204,7 @@ public class BetControllerTest extends BaseTest {
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
-		   .andDo(debugLog())
+		   .andDo(traceLog())
 		   .andExpect(status().isIAmATeapot())
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
@@ -215,7 +215,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldGetREADME() throws Exception {
 		
         mvc.perform(get("/"))
-	       .andDo(debugLog())
+	       .andDo(traceLog())
 	       .andExpect(status().isOk())
 	       .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
 	       .andExpect(content().string(startsWith("GET /available")))
