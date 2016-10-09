@@ -7,7 +7,7 @@ import com.sparcs.bet.dto.base.AvailableBetBase;
  * 
  * @author Lee Newfeld
  */
-public final class SkyBet extends AvailableBetBase {
+public final class FractionalBet extends AvailableBetBase {
 
 	private static final long serialVersionUID = 1115565796101994073L;
 	
@@ -17,7 +17,7 @@ public final class SkyBet extends AvailableBetBase {
 	 * Constructor for Faster Jackson
 	 */
 	@SuppressWarnings("unused")
-	private SkyBet() {
+	private FractionalBet() {
 	}
 
 	/**
@@ -28,7 +28,7 @@ public final class SkyBet extends AvailableBetBase {
 	 * @param numerator The numerator element of the fractional odds
 	 * @param denominator The denominator element of the fractional odds
 	 */
-	SkyBet(int id, String eventName, String name, int numerator, int denominator) {
+	FractionalBet(int id, String eventName, String name, int numerator, int denominator) {
 
 		super(id, eventName, name);
 
@@ -45,7 +45,7 @@ public final class SkyBet extends AvailableBetBase {
 
 	@Override
 	public String toString() {
-		return "SkyBet [id=" + getBetId() +
+		return "FractionalBet [id=" + getBetId() +
 			   ", eventName=" + getEventName() +
 			   ", name=" + getName() +
 			   ", odds.numerator=" + odds.getNumerator() +

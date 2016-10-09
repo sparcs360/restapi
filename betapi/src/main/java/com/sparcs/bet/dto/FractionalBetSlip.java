@@ -7,7 +7,7 @@ import com.sparcs.bet.dto.base.BettingSlipBase;
  * 
  * @author Lee Newfeld
  */
-public final class SkyBetSlip extends BettingSlipBase {
+public final class FractionalBetSlip extends BettingSlipBase {
 
 	private static final long serialVersionUID = -7847002685472216046L;
 	
@@ -17,7 +17,7 @@ public final class SkyBetSlip extends BettingSlipBase {
 	 * Constructor for Faster Jackson
 	 */
 	@SuppressWarnings("unused")
-	private SkyBetSlip() {
+	private FractionalBetSlip() {
 		
 		super();
 	}
@@ -25,11 +25,11 @@ public final class SkyBetSlip extends BettingSlipBase {
 	/**
 	 * Constructor
 	 * 
-	 * @param betId The unique identifier of the {@link SkyBet bet} being taken.
+	 * @param betId The unique identifier of the {@link FractionalBet bet} being taken.
 	 * @param odds The requested odds.
 	 * @param stake The amount to put at risk.
 	 */
-	public SkyBetSlip(int betId, Odds odds, int stake) {
+	public FractionalBetSlip(int betId, Odds odds, int stake) {
 
 		super(betId, stake);
 
@@ -40,9 +40,9 @@ public final class SkyBetSlip extends BettingSlipBase {
 	 * Construct a betting slip with fractional odds based on a betting slip
 	 * with decimal odds.
 	 *  
-	 * @param slip The {@link BetSlip} to base this betting slip on.
+	 * @param slip The {@link DecimalBetSlip} to base this betting slip on.
 	 */
-	public SkyBetSlip(BetSlip slip) {
+	public FractionalBetSlip(DecimalBetSlip slip) {
 		
 		this(slip.getBetId(), new Odds(slip.getOdds()), slip.getStake());
 	}
@@ -58,6 +58,6 @@ public final class SkyBetSlip extends BettingSlipBase {
 
 	@Override
 	public String toString() {
-		return "SkyBetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + getStake() + "]";
+		return "FractionalBetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + getStake() + "]";
 	}
 }

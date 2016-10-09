@@ -13,9 +13,9 @@ import org.springframework.web.client.RestOperations;
 
 import com.sparcs.bet.api.SkyBetException;
 import com.sparcs.bet.api.SkyBetService;
-import com.sparcs.bet.dto.SkyBet;
-import com.sparcs.bet.dto.SkyBetReceipt;
-import com.sparcs.bet.dto.SkyBetSlip;
+import com.sparcs.bet.dto.FractionalBet;
+import com.sparcs.bet.dto.FractionalBetReceipt;
+import com.sparcs.bet.dto.FractionalBetSlip;
 
 /**
  * Implementation of {@link SkyBetService}.
@@ -38,12 +38,12 @@ class SkyBetServiceImpl implements SkyBetService {
 	 * @see com.sparcs.betapi.SkyBetService#getAvailable()
 	 */
     @Override
-	public List<SkyBet> getAvailable() {
+	public List<FractionalBet> getAvailable() {
 
 		// Get the master list of Bets from Sky... 
-		ResponseEntity<List<SkyBet>> response =
+		ResponseEntity<List<FractionalBet>> response =
 		        restClient.exchange(URL_AVAILABLE,
-		                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SkyBet>>() {});
+		                    HttpMethod.GET, null, new ParameterizedTypeReference<List<FractionalBet>>() {});
     	log.trace(response.toString());
 
 		return response.getBody();
@@ -53,7 +53,7 @@ class SkyBetServiceImpl implements SkyBetService {
 	 * @see com.sparcs.betapi.SkyBetService#placeBet(com.sparcs.betapi.SkyBet, int)
 	 */
     @Override
-	public SkyBetReceipt placeBet(SkyBetSlip slip) {
+	public FractionalBetReceipt placeBet(FractionalBetSlip slip) {
 
     	log.trace("slip={}", slip.toString());
 
@@ -71,8 +71,8 @@ class SkyBetServiceImpl implements SkyBetService {
     	}
 
     	// POST the slip to SkyBet
-    	ResponseEntity<SkyBetReceipt> response =
-    			restClient.postForEntity(URL_BETS, slip, SkyBetReceipt.class);
+    	ResponseEntity<FractionalBetReceipt> response =
+    			restClient.postForEntity(URL_BETS, slip, FractionalBetReceipt.class);
     	log.trace(response.toString());
     	
 		return response.getBody();

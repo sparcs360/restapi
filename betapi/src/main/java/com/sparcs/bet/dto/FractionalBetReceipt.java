@@ -10,17 +10,17 @@ import com.sparcs.bet.dto.base.ReceiptBase;
  *  
  * @author Lee Newfeld
  */
-public class SkyBetReceipt extends ReceiptBase {
+public class FractionalBetReceipt extends ReceiptBase {
 
 	private static final long serialVersionUID = 5888789369984676552L;
 	
-	private SkyBet bet;
+	private FractionalBet bet;
 
 	/**
 	 * Constructor for Faster Jackson
 	 */
 	@SuppressWarnings("unused")
-	private SkyBetReceipt() {
+	private FractionalBetReceipt() {
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class SkyBetReceipt extends ReceiptBase {
 	 * @param stake
 	 * @param transactionId
 	 */
-	SkyBetReceipt(SkyBet bet, int stake, int transactionId) {
+	FractionalBetReceipt(FractionalBet bet, int stake, int transactionId) {
 
 		super(stake, transactionId);
 		
@@ -38,10 +38,10 @@ public class SkyBetReceipt extends ReceiptBase {
 	}
 
 	/**
-	 * @return The {@link SkyBet bet} that was taken.
+	 * @return The {@link FractionalBet bet} that was taken.
 	 */
 	@JsonUnwrapped
-	public SkyBet getBet() {
+	public FractionalBet getBet() {
 		
 		return bet;
 	}
@@ -49,6 +49,6 @@ public class SkyBetReceipt extends ReceiptBase {
 	@Override
 	public String toString() {
 		
-		return "SkyBetReceipt [bet=" + bet + ", stake=" + getStake() + ", transactionId=" + getTransactionId() + "]";
+		return "FractionalBetReceipt [bet=" + bet + ", stake=" + getStake() + ", transactionId=" + getTransactionId() + "]";
 	}
 }

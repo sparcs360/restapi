@@ -2,9 +2,9 @@ package com.sparcs.bet.api;
 
 import java.util.List;
 
-import com.sparcs.bet.dto.Bet;
-import com.sparcs.bet.dto.BetReceipt;
-import com.sparcs.bet.dto.BetSlip;
+import com.sparcs.bet.dto.DecimalBet;
+import com.sparcs.bet.dto.DecimalBetReceipt;
+import com.sparcs.bet.dto.DecimalBetSlip;
 
 /**
  * Controller for the Betting API
@@ -14,8 +14,8 @@ import com.sparcs.bet.dto.BetSlip;
 public interface BetController {
 
 	/**
-	 * Error message returned if the {@link BetSlip} argument of
-	 * {@link #placeBet(BetSlip)} can't be deserialised from the JSON
+	 * Error message returned if the {@link DecimalBetSlip} argument of
+	 * {@link #placeBet(DecimalBetSlip)} can't be deserialised from the JSON
 	 * provided by the caller.
 	 */
 	public static final String ERROR_BAD_SLIP =
@@ -30,16 +30,16 @@ public interface BetController {
 	public String getReadMe();
 	
 	/**
-	 * Get the list of available {@link Bet}s.
+	 * Get the list of available {@link DecimalBet}s.
 	 * @return
 	 */
-	public List<Bet> getAvailable();
+	public List<DecimalBet> getAvailable();
 	
 	/**
 	 * Place a bet...
 	 *  
-	 * @param slip Your {@link BetSlip betting slip}
+	 * @param slip Your {@link DecimalBetSlip betting slip}
 	 * @return A digital receipt 
 	 */
-	BetReceipt placeBet(BetSlip slip);
+	DecimalBetReceipt placeBet(DecimalBetSlip slip);
 }

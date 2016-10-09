@@ -10,7 +10,7 @@ import com.sparcs.bet.dto.base.BettingSlipBase;
  * 
  * @author Lee Newfeld
  */
-public final class BetSlip extends BettingSlipBase {
+public final class DecimalBetSlip extends BettingSlipBase {
 
 	private static final long serialVersionUID = -8986042172060371020L;
 	
@@ -20,7 +20,7 @@ public final class BetSlip extends BettingSlipBase {
 	 * Constructor for Faster Jackson
 	 */
 	@SuppressWarnings("unused")
-	private BetSlip() {
+	private DecimalBetSlip() {
 		
 		super();
 	}
@@ -28,11 +28,11 @@ public final class BetSlip extends BettingSlipBase {
 	/**
 	 * Constructor
 	 * 
-	 * @param betId The unique identifier of the {@link Bet bet} being taken.
+	 * @param betId The unique identifier of the {@link DecimalBet bet} being taken.
 	 * @param odds The requested odds.
 	 * @param stake The amount to put at risk.
 	 */
-	public BetSlip(int betId, BigDecimal odds, int stake) {
+	public DecimalBetSlip(int betId, BigDecimal odds, int stake) {
 
 		super(betId, stake);
 		
@@ -48,7 +48,7 @@ public final class BetSlip extends BettingSlipBase {
 	}
 
 	/**
-	 * @return true if a value for all mandatory properties have been provided.
+	 * @return true if all mandatory properties have a valid value.
 	 */
 	@JsonIgnore
 	public boolean isComplete() {
@@ -58,6 +58,6 @@ public final class BetSlip extends BettingSlipBase {
 
 	@Override
 	public String toString() {
-		return "BetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + getStake() + "]";
+		return "DecimalBetSlip [betId=" + getBetId() + ", odds=" + odds + ", stake=" + getStake() + "]";
 	}
 }

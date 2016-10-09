@@ -2,9 +2,9 @@ package com.sparcs.bet.api;
 
 import java.util.List;
 
-import com.sparcs.bet.dto.SkyBet;
-import com.sparcs.bet.dto.SkyBetReceipt;
-import com.sparcs.bet.dto.SkyBetSlip;
+import com.sparcs.bet.dto.FractionalBet;
+import com.sparcs.bet.dto.FractionalBetReceipt;
+import com.sparcs.bet.dto.FractionalBetSlip;
 
 /**
  * A service for consuming the SkyBet API at
@@ -15,15 +15,15 @@ import com.sparcs.bet.dto.SkyBetSlip;
 public interface SkyBetService {
 
 	/**
-	 * @return The list of {@link SkyBet bets} available from Sky Bet.
+	 * @return The list of {@link FractionalBet bets} available from Sky Bet.
 	 */
-	List<SkyBet> getAvailable();
+	List<FractionalBet> getAvailable();
 
 	/**
 	 * Place a bet...
 	 *  
-	 * @param slip A {@link SkyBetSlip} describing the bet you wish to place
+	 * @param slip A {@link FractionalBetSlip} describing the bet you wish to place
 	 * @return A digital receipt (if the bet was accepted)
 	 */
-	SkyBetReceipt placeBet(SkyBetSlip slip);
+	FractionalBetReceipt placeBet(FractionalBetSlip slip);
 }

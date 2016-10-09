@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import com.sparcs.bet.BaseTest;
-import com.sparcs.bet.dto.BetSlip;
+import com.sparcs.bet.dto.DecimalBetSlip;
 
 /**
  * {@link BetControllerImpl} tests
@@ -58,7 +58,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldGetReceiptForValidBet() throws Exception {
 
 		// Create valid betting slip
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content(prettyPrint(slip)))
@@ -126,7 +126,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForNonExistentBetId() throws Exception {
 
 		// No such bet with Id #999
-		BetSlip slip = new BetSlip(999, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(999, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
@@ -141,7 +141,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForZeroBetId() throws Exception {
 
 		// No such bet with Id #0
-		BetSlip slip = new BetSlip(0, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(0, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
@@ -156,7 +156,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForNegativeBetId() throws Exception {
 
 		// No such bet with Id #-1
-		BetSlip slip = new BetSlip(-1, new BigDecimal(11), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(-1, new BigDecimal(11), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
@@ -171,7 +171,7 @@ public class BetControllerTest extends BaseTest {
 	public void shouldntGetReceiptForInvalidOdds() throws Exception {
 
 		// Odds don't match current odds
-		BetSlip slip = new BetSlip(1, new BigDecimal(101), 100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(101), 100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))
@@ -185,7 +185,7 @@ public class BetControllerTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForZeroStake() throws Exception {
 
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), 0);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), 0);
 
     	// Note: BetControllerImpl doesn't allow zero stakes but the Sky API it delegates to does.
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -200,7 +200,7 @@ public class BetControllerTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForNegativeStake() throws Exception {
 
-		BetSlip slip = new BetSlip(1, new BigDecimal(11), -100);
+		DecimalBetSlip slip = new DecimalBetSlip(1, new BigDecimal(11), -100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 				 .content(prettyPrint(slip)))

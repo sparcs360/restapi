@@ -12,11 +12,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparcs.bet.BaseTest;
 
 /**
- * {@link BetReceipt} tests
+ * {@link DecimalBetReceipt} tests
  *  
  * @author Lee Newfeld
  */
-public class BetReceiptTest extends BaseTest {
+public class DecimalBetReceiptTest extends BaseTest {
 
 	private static final String JSON_VALID =
 			"{ \"bet_id\": 1, \"event\": \"World Cup 2018\", " +
@@ -26,8 +26,8 @@ public class BetReceiptTest extends BaseTest {
 	@Test
 	public void shouldSerialiseToExpectedJson() throws JsonProcessingException {
 
-		Bet bet = new Bet(1, "World Cup 2018", "England", new BigDecimal(11));
-		BetReceipt receipt = new BetReceipt(bet, 100, 12345);
+		DecimalBet bet = new DecimalBet(1, "World Cup 2018", "England", new BigDecimal(11));
+		DecimalBetReceipt receipt = new DecimalBetReceipt(bet, 100, 12345);
 		String actualJson = prettyPrint(receipt);
 		JSONAssert.assertEquals(JSON_VALID, actualJson, true);
 	}
@@ -35,7 +35,7 @@ public class BetReceiptTest extends BaseTest {
 	@Test
 	public void shouldDeserialiseFromExpectedJson() throws Exception {
 		
-		BetReceipt receipt = jsonMapper.readValue(JSON_VALID, BetReceipt.class);
+		DecimalBetReceipt receipt = jsonMapper.readValue(JSON_VALID, DecimalBetReceipt.class);
 		assertThat(receipt, notNullValue());
 		assertThat(receipt.getBet().getBetId(), is(1));
 		assertThat(receipt.getBet().getEventName(), is("World Cup 2018"));

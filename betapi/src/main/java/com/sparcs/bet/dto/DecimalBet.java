@@ -9,7 +9,7 @@ import com.sparcs.bet.dto.base.AvailableBetBase;
  * 
  * @author Lee Newfeld
  */
-public final class Bet extends AvailableBetBase {
+public final class DecimalBet extends AvailableBetBase {
 
 	private static final long serialVersionUID = -2952590949726157518L;
 	
@@ -19,7 +19,7 @@ public final class Bet extends AvailableBetBase {
 	 * Constructor for Faster Jackson
 	 */
 	@SuppressWarnings("unused")
-	private Bet() {
+	private DecimalBet() {
 		
 		super();
 	}
@@ -32,7 +32,7 @@ public final class Bet extends AvailableBetBase {
 	 * @param name The name of the entity being Bet on
 	 * @param odds The odds offered.
 	 */
-	Bet(int id, String eventName, String name, BigDecimal odds) {
+	DecimalBet(int id, String eventName, String name, BigDecimal odds) {
 		
 		super(id, eventName, name);
 		
@@ -40,9 +40,9 @@ public final class Bet extends AvailableBetBase {
 	}
 
 	/**
-	 * @param skyBet A {@link SkyBet} to base this {@link Bet} on.
+	 * @param skyBet A {@link FractionalBet} to base this {@link DecimalBet} on.
 	 */
-	public Bet(SkyBet skyBet) {
+	public DecimalBet(FractionalBet skyBet) {
 
 		super(skyBet.getBetId(), skyBet.getEventName(), skyBet.getName());
 		
@@ -59,7 +59,7 @@ public final class Bet extends AvailableBetBase {
 	
 	@Override
 	public String toString() {
-		return "SkyBet [id=" + getBetId() +
+		return "DecimalBet [id=" + getBetId() +
 			   ", eventName=" + getEventName() +
 			   ", name=" + getName() +
 			   ", odds=" + odds + "]";

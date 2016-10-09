@@ -20,9 +20,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import com.sparcs.bet.BaseTest;
 import com.sparcs.bet.dto.Odds;
-import com.sparcs.bet.dto.SkyBet;
-import com.sparcs.bet.dto.SkyBetReceipt;
-import com.sparcs.bet.dto.SkyBetSlip;
+import com.sparcs.bet.dto.FractionalBet;
+import com.sparcs.bet.dto.FractionalBetReceipt;
+import com.sparcs.bet.dto.FractionalBetSlip;
 
 /**
  * {@link SkyBetServiceImpl} tests
@@ -37,7 +37,7 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldGetResponseFromGetAvailable() throws Exception {
 
-		List<SkyBet> bets = skyBetService.getAvailable();
+		List<FractionalBet> bets = skyBetService.getAvailable();
 		assertThat(bets, notNullValue());
 		assertThat(bets, hasSize(6));
 		
@@ -87,8 +87,8 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldGetReceiptForValidBet() {
 
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 100);
-		SkyBetReceipt receipt = skyBetService.placeBet(slip);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(10, 1), 100);
+		FractionalBetReceipt receipt = skyBetService.placeBet(slip);
 		
 		assertThat(receipt, notNullValue());
 		assertThat(receipt.getBet().getBetId(), is(slip.getBetId()));
@@ -102,7 +102,7 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForZeroStake() {
 
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 0);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(10, 1), 0);
 		
     	// Note: The Sky API allows a zero stake.
 		//       SkyBetServiceImpl traps this condition and returns a 418.
@@ -119,7 +119,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForNonExistentBetId() {
 
 		// No such bet with Id #999
-		SkyBetSlip slip = new SkyBetSlip(999, new Odds(10, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(999, new Odds(10, 1), 100);
 
 		shouldntGetReceiptForNonExistentBetIdException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForNonExistentBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
@@ -134,7 +134,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForZeroBetId() {
 
 		// No such bet with Id #0
-		SkyBetSlip slip = new SkyBetSlip(0, new Odds(10, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(0, new Odds(10, 1), 100);
 		
     	// Note: The Sky API throws an HTTP 500 if bet_id <= 0.
 		//       SkyBetServiceImpl traps this condition and returns a 418.
@@ -151,7 +151,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForNegativeBetId() {
 
 		// No such bet with Id #-1
-		SkyBetSlip slip = new SkyBetSlip(-1, new Odds(10, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(-1, new Odds(10, 1), 100);
 		
     	// Note: The Sky API throws an HTTP 500 if bet_id <= 0.
 		//       SkyBetServiceImpl traps this condition and returns a 418.
@@ -168,7 +168,7 @@ public class SkyBetServiceTest extends BaseTest {
 	public void shouldntGetReceiptForInvalidOdds() {
 
 		// Odds don't match current odds
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(100, 1), 100);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(100, 1), 100);
 
 		shouldntGetReceiptForInvalidOddsException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForInvalidOddsException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
@@ -182,7 +182,7 @@ public class SkyBetServiceTest extends BaseTest {
 	@Test
 	public void shouldntGetReceiptForNegativeStake() {
 
-		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), -100);
+		FractionalBetSlip slip = new FractionalBetSlip(1, new Odds(10, 1), -100);
 		
 		shouldntGetReceiptForNegativeStakeException.expect(HttpClientErrorException.class);
 		shouldntGetReceiptForNegativeStakeException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));

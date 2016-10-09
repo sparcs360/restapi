@@ -21,7 +21,7 @@ public abstract class BettingSlipBase extends BetBase {
 	/**
 	 * Constructor
 	 * 
-	 * @param betId The unique identifier of the {@link SkyBet bet} being taken.
+	 * @param betId The unique identifier of the {@link FractionalBet bet} being taken.
 	 * @param stake The amount to put at risk.
 	 */
 	protected BettingSlipBase(int betId, int stake) {

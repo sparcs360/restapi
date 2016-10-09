@@ -21,11 +21,11 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import com.sparcs.bet.api.BetController;
 import com.sparcs.bet.api.SkyBetService;
-import com.sparcs.bet.dto.Bet;
-import com.sparcs.bet.dto.BetReceipt;
-import com.sparcs.bet.dto.BetSlip;
-import com.sparcs.bet.dto.SkyBetReceipt;
-import com.sparcs.bet.dto.SkyBetSlip;
+import com.sparcs.bet.dto.DecimalBet;
+import com.sparcs.bet.dto.DecimalBetReceipt;
+import com.sparcs.bet.dto.DecimalBetSlip;
+import com.sparcs.bet.dto.FractionalBetReceipt;
+import com.sparcs.bet.dto.FractionalBetSlip;
 
 /**
  * Implementation of {@link BetController}.
@@ -38,7 +38,7 @@ class BetControllerImpl implements BetController {
 	private static final Logger log = LoggerFactory.getLogger(BetControllerImpl.class);
 
 	/**
-	 * Exception thrown if {@link BetSlip} is only partially "filled in" (i.e.,
+	 * Exception thrown if {@link DecimalBetSlip} is only partially "filled in" (i.e.,
 	 * the Json provided by the caller didn't deserialise to a complete object - e.g.,
 	 * The <code>bet_id</code> and <code>stake</code> are present, but the
 	 * <code>odds</code> are missing). 
@@ -123,12 +123,12 @@ class BetControllerImpl implements BetController {
 		method={RequestMethod.GET},
 		produces={MediaType.APPLICATION_JSON_UTF8_VALUE}
 	)
-	public @ResponseBody List<Bet> getAvailable() {
+	public @ResponseBody List<DecimalBet> getAvailable() {
 
 		// Convert available bets from Sky to our betting format
 		return skyBetService.getAvailable()
 			.stream()
-			.map(sb -> new Bet(sb))	// Use a mapper instead?
+			.map(fractionalBet -> new DecimalBet(fractionalBet))
 			.collect(Collectors.toList());
 	}
 
@@ -142,7 +142,7 @@ class BetControllerImpl implements BetController {
 		consumes={MediaType.APPLICATION_JSON_UTF8_VALUE},
 		produces={MediaType.APPLICATION_JSON_UTF8_VALUE}
 	)
-	public @ResponseBody BetReceipt placeBet(@RequestBody BetSlip slip) {
+	public @ResponseBody DecimalBetReceipt placeBet(@RequestBody DecimalBetSlip slip) {
 
 		log.trace("slip={}", slip);
 		
@@ -154,12 +154,12 @@ class BetControllerImpl implements BetController {
 		}
 		
 		// Create a Sky betting slip based on ours
-		SkyBetSlip skySlip = new SkyBetSlip(slip);
+		FractionalBetSlip skySlip = new FractionalBetSlip(slip);
 
 		// Place the bet with Sky
-		SkyBetReceipt receipt = skyBetService.placeBet(skySlip);
+		FractionalBetReceipt receipt = skyBetService.placeBet(skySlip);
 		
 		// Return our receipt based on Sky's
-		return new BetReceipt(receipt);
+		return new DecimalBetReceipt(receipt);
 	}
 }

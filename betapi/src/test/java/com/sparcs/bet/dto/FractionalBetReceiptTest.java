@@ -10,11 +10,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparcs.bet.BaseTest;
 
 /**
- * {@link SkyBetReceipt} tests
+ * {@link FractionalBetReceipt} tests
  *  
  * @author Lee Newfeld
  */
-public class SkyBetReceiptTest extends BaseTest {
+public class FractionalBetReceiptTest extends BaseTest {
 
 	private static final String JSON_VALID =
 			"{ \"bet_id\": 1, \"event\": \"World Cup 2018\", " +
@@ -24,8 +24,8 @@ public class SkyBetReceiptTest extends BaseTest {
 	@Test
 	public void shouldSerialiseToExpectedJson() throws JsonProcessingException {
 
-		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 10, 1);
-		SkyBetReceipt receipt = new SkyBetReceipt(bet, 100, 12345);
+		FractionalBet bet = new FractionalBet(1, "World Cup 2018", "England", 10, 1);
+		FractionalBetReceipt receipt = new FractionalBetReceipt(bet, 100, 12345);
 		String actualJson = prettyPrint(receipt);
 		JSONAssert.assertEquals(JSON_VALID, actualJson, true);
 	}
@@ -33,7 +33,7 @@ public class SkyBetReceiptTest extends BaseTest {
 	@Test
 	public void shouldDeserialiseFromExpectedJson() throws Exception {
 		
-		SkyBetReceipt receipt = jsonMapper.readValue(JSON_VALID, SkyBetReceipt.class);
+		FractionalBetReceipt receipt = jsonMapper.readValue(JSON_VALID, FractionalBetReceipt.class);
 		assertThat(receipt, notNullValue());
 		assertThat(receipt.getBet().getBetId(), is(1));
 		assertThat(receipt.getBet().getEventName(), is("World Cup 2018"));

@@ -10,18 +10,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparcs.bet.BaseTest;
 
 /**
- * {@link SkyBet} tests
+ * {@link FractionalBet} tests
  *  
  * @author Lee Newfeld
  */
-public class SkyBetTest extends BaseTest {
+public class FractionalBetTest extends BaseTest {
 
 	private static final String JSON_VALID = "{ \"bet_id\": 1, \"event\": \"World Cup 2018\", \"name\": \"England\", \"odds\": { \"numerator\": 10, \"denominator\": 1 } }";
 
 	@Test
 	public void shouldSerialiseToExpectedJson() throws JsonProcessingException {
 
-		SkyBet bet = new SkyBet(1, "World Cup 2018", "England", 10, 1);
+		FractionalBet bet = new FractionalBet(1, "World Cup 2018", "England", 10, 1);
 		String actualJson = prettyPrint(bet);
 		JSONAssert.assertEquals(JSON_VALID, actualJson, true);
 	}
@@ -29,7 +29,7 @@ public class SkyBetTest extends BaseTest {
 	@Test
 	public void shouldDeserialiseFromExpectedJson() throws Exception {
 		
-		SkyBet bet = jsonMapper.readValue(JSON_VALID, SkyBet.class);
+		FractionalBet bet = jsonMapper.readValue(JSON_VALID, FractionalBet.class);
 		assertThat(bet, notNullValue());
 		assertThat(bet.getBetId(), is(1));
 		assertThat(bet.getEventName(), is("World Cup 2018"));
