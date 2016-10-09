@@ -1,8 +1,10 @@
 package com.sparcs.betapi.internal;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +91,28 @@ class BetControllerImpl implements BetController {
 				.body(body)
 				;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.sparcs.betapi.BetController#getReadMe()
+	 */
+	@Override
+	@RequestMapping(
+		path="",
+		method={RequestMethod.GET},
+		produces={MediaType.TEXT_PLAIN_VALUE}
+	)
+    public String getReadMe() {
+    	
+    	try {
+    		
+			return IOUtils.toString(getClass().getResourceAsStream("/README.txt"));
+			
+		} catch (IOException e) {
+
+			log.error("Failed to get README.txt resource", e);
+			return "Not available";
+		}
+    }
 
 	/* (non-Javadoc)
 	 * @see com.sparcs.betapi.BetController#getAvailable()

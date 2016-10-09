@@ -19,6 +19,13 @@ public interface BetController {
 			"Example: { \"bet_id\": 1, \"odds\": 11.0, \"stake\": 100}";
 
 	/**
+	 * Get information on API usage.
+	 * 
+	 * @return The README!
+	 */
+	public String getReadMe();
+	
+	/**
 	 * Get the list of available {@link Bet}s.
 	 * @return
 	 */

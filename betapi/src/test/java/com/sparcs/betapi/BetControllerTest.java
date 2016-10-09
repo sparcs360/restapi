@@ -209,4 +209,15 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
 		   ;
 	}
+	
+	@Test
+	public void shouldGetREADME() throws Exception {
+		
+        mvc.perform(get("/"))
+	       .andDo(debugLog())
+	       .andExpect(status().isOk())
+	       .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8"))
+	       .andExpect(content().string(startsWith("GET /available")))
+	       ;
+	}
 }
