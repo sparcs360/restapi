@@ -1,7 +1,6 @@
 package com.sparcs.betapi.internal;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
+import com.sparcs.betapi.BetException;
 import com.sparcs.betapi.SkyBet;
 import com.sparcs.betapi.SkyBetReceipt;
 import com.sparcs.betapi.SkyBetService;
@@ -64,8 +64,18 @@ class SkyBetServiceImpl implements SkyBetService {
 
     	log.trace("slip={}", slip.toString());
 
-    	// Validate arguments
-    	Objects.requireNonNull(slip,  "slip must not be null");
+    	// Sky API throws a HTTP 500 if bet_id <= 0.  Let's trap that condition
+		// and return a more relevant error
+		if( slip.getBetId() < 1 ) {
+			
+			throw BetException.INVALID_BET_ID;
+		}
+    	// Sky API will allow a bet with zero stake to be taken.  We don't want
+		// that.
+    	if( slip.getStake() == 0 ) {
+
+    		throw BetException.INVALID_STAKE;
+    	}
 
     	// POST the slip to SkyBet
     	ResponseEntity<SkyBetReceipt> response =

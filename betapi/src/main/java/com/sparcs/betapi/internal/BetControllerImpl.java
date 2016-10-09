@@ -18,7 +18,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import com.sparcs.betapi.Bet;
 import com.sparcs.betapi.BetController;
-import com.sparcs.betapi.BetException;
 import com.sparcs.betapi.BetReceipt;
 import com.sparcs.betapi.BetSlip;
 import com.sparcs.betapi.SkyBetReceipt;
@@ -90,19 +89,6 @@ class BetControllerImpl implements BetController {
 
 		log.trace("slip={}", slip);
 		
-    	// Sky API throws a HTTP 500 if bet_id <= 0.  Let's trap that condition
-		// and return a more relevant error
-		if( slip.getBetId() < 1 ) {
-			
-			throw BetException.INVALID_BET_ID;
-		}
-    	// Sky API will allow a bet with zero stake to be taken.  We don't want
-		// that.
-    	if( slip.getStake() == 0 ) {
-
-    		throw BetException.INVALID_STAKE;
-    	}
-
 		// Place the bet (with Sky)
 		SkyBetSlip skySlip = new SkyBetSlip(slip);
 

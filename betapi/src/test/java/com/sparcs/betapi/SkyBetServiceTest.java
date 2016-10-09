@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import com.sparcs.BaseTest;
@@ -106,28 +105,28 @@ public class SkyBetServiceTest extends BaseTest {
 		log.trace("-shouldGetReceiptForValidBet");
 	}
 
+	@Rule
+	public ExpectedException shouldntGetReceiptForZeroStakeException = ExpectedException.none();
 	@Test
-	public void shouldGetReceiptForValidBetWithZeroStake() {
+	public void shouldntGetReceiptForZeroStake() {
 
-		log.trace("+shouldGetReceiptForValidBetWithZeroStake");
+		log.trace("+shouldntGetReceiptForZeroStake");
 		
-    	// Note: Sky API allow a zero stakes - the BetControllerImpl traps this condition.
 		SkyBetSlip slip = new SkyBetSlip(1, new Odds(10, 1), 0);
-		SkyBetReceipt receipt = skyBetService.placeBet(slip);
 		
-		assertThat(receipt, notNullValue());
-		assertThat(receipt.getBet().getId(), is(slip.getBetId()));
-		assertThat(receipt.getBet().getOdds(), is(slip.getOdds()));
-		assertThat(receipt.getStake(), is(slip.getStake()));
-		assertThat(receipt.getTransactionId(), greaterThan(0));
+    	// Note: The Sky API allows a zero stake.
+		//       SkyBetServiceImpl traps this condition and returns a 418.
+		shouldntGetReceiptForZeroStakeException.expect(HttpClientErrorException.class);
+		shouldntGetReceiptForZeroStakeException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
+		shouldntGetReceiptForZeroStakeException.expect(jsonBodyMatches("{ \"error\": \"Invalid Stake\" }"));
 
 		skyBetService.placeBet(slip);
 
-		log.trace("-shouldGetReceiptForValidBetWithZeroStake");
+		log.trace("-shouldntGetReceiptForZeroStake");
 	}
 
 	@Rule
-	public ExpectedException shouldntGetReceiptForInvalidBetIdException = ExpectedException.none();
+	public ExpectedException shouldntGetReceiptForNonExistentBetIdException = ExpectedException.none();
 	@Test
 	public void shouldntGetReceiptForNonExistentBetId() {
 
@@ -136,9 +135,9 @@ public class SkyBetServiceTest extends BaseTest {
 		// No such bet with Id #999
 		SkyBetSlip slip = new SkyBetSlip(999, new Odds(10, 1), 100);
 
-		shouldntGetReceiptForInvalidBetIdException.expect(HttpClientErrorException.class);
-		shouldntGetReceiptForInvalidBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
-		shouldntGetReceiptForInvalidBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
+		shouldntGetReceiptForNonExistentBetIdException.expect(HttpClientErrorException.class);
+		shouldntGetReceiptForNonExistentBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
+		shouldntGetReceiptForNonExistentBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
 		skyBetService.placeBet(slip);
 
@@ -155,9 +154,11 @@ public class SkyBetServiceTest extends BaseTest {
 		// No such bet with Id #0
 		SkyBetSlip slip = new SkyBetSlip(0, new Odds(10, 1), 100);
 		
-		// If betId <= 0 then the SkyBet API throws an HTTP 500 instead of a 418
-		shouldntGetReceiptForZeroBetIdException.expect(HttpServerErrorException.class);
-		shouldntGetReceiptForZeroBetIdException.expect(hasStatusCode(HttpStatus.INTERNAL_SERVER_ERROR));
+    	// Note: The Sky API throws an HTTP 500 if bet_id <= 0.
+		//       SkyBetServiceImpl traps this condition and returns a 418.
+		shouldntGetReceiptForZeroBetIdException.expect(HttpClientErrorException.class);
+		shouldntGetReceiptForZeroBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
+		shouldntGetReceiptForZeroBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
 		skyBetService.placeBet(slip);
 
@@ -174,9 +175,11 @@ public class SkyBetServiceTest extends BaseTest {
 		// No such bet with Id #-1
 		SkyBetSlip slip = new SkyBetSlip(-1, new Odds(10, 1), 100);
 		
-		// If betId <= 0 then the SkyBet API throws an HTTP 500 instead of a 418
-		shouldntGetReceiptForNegativeBetIdException.expect(HttpServerErrorException.class);
-		shouldntGetReceiptForNegativeBetIdException.expect(hasStatusCode(HttpStatus.INTERNAL_SERVER_ERROR));
+    	// Note: The Sky API throws an HTTP 500 if bet_id <= 0.
+		//       SkyBetServiceImpl traps this condition and returns a 418.
+		shouldntGetReceiptForNegativeBetIdException.expect(HttpClientErrorException.class);
+		shouldntGetReceiptForNegativeBetIdException.expect(hasStatusCode(HttpStatus.I_AM_A_TEAPOT));
+		shouldntGetReceiptForNegativeBetIdException.expect(jsonBodyMatches("{ \"error\": \"Invalid Bet ID\" }"));
 
 		skyBetService.placeBet(slip);
 
