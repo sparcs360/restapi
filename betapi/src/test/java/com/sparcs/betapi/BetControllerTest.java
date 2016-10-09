@@ -75,24 +75,32 @@ public class BetControllerTest extends BaseTest {
 	}
 	
 	@Test
-	public void shouldntGetReceiptWhenBetSlipIsUnreadable() throws Exception {
+	public void shouldntGetReceiptWhenRequestIsEmpty() throws Exception {
 
-//		log.trace("+shouldntGetReceiptWhenBetSlipIsUnreadable");
-		
+		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
+								 .content(""))
+		   .andDo(print())
+		   .andExpect(status().isBadRequest())
+		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
+		   ;
+	}
+
+	@Test
+	public void shouldntGetReceiptWhenRequestIsMalformed() throws Exception {
+
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
 								 .content("xxx: \"yyy\""))
 		   .andDo(print())
 		   .andExpect(status().isBadRequest())
+		   .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+		   .andExpect(content().string(startsWith(BetController.ERROR_BAD_SLIP)))
 		   ;
-
-//		log.trace("-shouldntGetReceiptWhenBetSlipIsUnreadable");
 	}
 
 	@Test
 	public void shouldntGetReceiptForNonExistentBetId() throws Exception {
 
-//		log.trace("+shouldntGetReceiptForNonExistentBetId");
-		
 		// No such bet with Id #999
 		BetSlip slip = new BetSlip(999, new BigDecimal(11), 100);
 
@@ -103,14 +111,10 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
 		   ;
-
-//		log.trace("-shouldntGetReceiptForNonExistentBetId");
 	}
 
 	@Test
 	public void shouldntGetReceiptForZeroBetId() throws Exception {
-
-//		log.trace("+shouldntGetReceiptForZeroBetId");
 
 		// No such bet with Id #0
 		BetSlip slip = new BetSlip(0, new BigDecimal(11), 100);
@@ -122,14 +126,10 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
 		   ;
-
-//		log.trace("-shouldntGetReceiptForZeroBetId");
 	}
 
 	@Test
 	public void shouldntGetReceiptForNegativeBetId() throws Exception {
-
-//		log.trace("+shouldntGetReceiptForNegativeBetId");
 
 		// No such bet with Id #-1
 		BetSlip slip = new BetSlip(-1, new BigDecimal(11), 100);
@@ -141,15 +141,11 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Bet ID")))
 		   ;
-
-//		log.trace("-shouldntGetReceiptForNegativeBetId");
 	}
 
 	@Test
 	public void shouldntGetReceiptForInvalidOdds() throws Exception {
 
-//		log.trace("+shouldntGetReceiptForInvalidOdds");
-		
 		// Odds don't match current odds
 		BetSlip slip = new BetSlip(1, new BigDecimal(101), 100);
 
@@ -160,15 +156,11 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Incorrect Odds")))
 		   ;
-
-//		log.trace("-shouldntGetReceiptForInvalidOdds");
 	}
 
 	@Test
 	public void shouldntGetReceiptForZeroStake() throws Exception {
 
-//		log.trace("+shouldntGetReceiptForZeroStake");
-		
 		BetSlip slip = new BetSlip(1, new BigDecimal(11), 0);
 
     	// Note: BetControllerImpl doesn't allow zero stakes but the Sky API it delegates to does.
@@ -179,15 +171,11 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
 		   ;
-
-//		log.trace("-shouldntGetReceiptForZeroStake");
 	}
 
 	@Test
 	public void shouldntGetReceiptForNegativeStake() throws Exception {
 
-//		log.trace("+shouldntGetReceiptForNegativeStake");
-		
 		BetSlip slip = new BetSlip(1, new BigDecimal(11), -100);
 
 		mvc.perform(post("/bets").contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -197,7 +185,5 @@ public class BetControllerTest extends BaseTest {
 		   .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
 		   .andExpect(jsonPath("$.error", is("Invalid Stake")))
 		   ;
-
-//		log.trace("-shouldntGetReceiptForNegativeStake");
 	}
 }

@@ -10,6 +10,15 @@ import java.util.List;
 public interface BetController {
 
 	/**
+	 * Error message returned if the {@link BetSlip} argument of
+	 * {@link #placeBet(BetSlip)} can't be deserialised from the JSON
+	 * provided by the caller.
+	 */
+	public static final String ERROR_BAD_SLIP =
+			"Your betting slip isn't readable.  " +
+			"Example: { \"bet_id\": 1, \"odds\": 11.0, \"stake\": 100}";
+
+	/**
 	 * Get the list of available {@link Bet}s.
 	 * @return
 	 */

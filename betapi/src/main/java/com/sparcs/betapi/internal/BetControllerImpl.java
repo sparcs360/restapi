@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +39,9 @@ class BetControllerImpl implements BetController {
 	private SkyBetService skyBetService;
 	
 	/**
-	 * Default constructor
+	 * Only let Spring instantiate these
 	 */
-	BetControllerImpl() {
+	private BetControllerImpl() {
 	}
 
 	/**
@@ -55,6 +56,29 @@ class BetControllerImpl implements BetController {
 	public ResponseEntity<String> handleHttpStatusCodeException(HttpStatusCodeException e) {
 
 	    return new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
+	}
+	
+	/**
+	 * <p>Handler for {@link HttpMessageNotReadableException}s thrown by Spring
+	 * if the {@link RequestBody} can't be deserialised.</p>
+	 *  
+	 * @param e The caught exception
+	 * @return A 400 with a descriptive body
+	 */
+	@ExceptionHandler({HttpMessageNotReadableException.class})
+	public ResponseEntity<String> handleHttpMessageNotReadableException(
+			HttpMessageNotReadableException e) {
+
+		String body = String.format(
+			"%s\n%s",
+			ERROR_BAD_SLIP, e.getMostSpecificCause().getMessage()
+		);
+
+		return ResponseEntity
+				.badRequest()
+				.contentType(MediaType.TEXT_PLAIN)
+				.body(body)
+				;
 	}
 
 	/* (non-Javadoc)
