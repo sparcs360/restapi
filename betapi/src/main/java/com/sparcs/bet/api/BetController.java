@@ -1,6 +1,10 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import java.util.List;
+
+import com.sparcs.bet.dto.Bet;
+import com.sparcs.bet.dto.BetReceipt;
+import com.sparcs.bet.dto.BetSlip;
 
 /**
  * Controller for the Betting API

@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,7 +32,7 @@ public class Odds {
 	 * @param numerator
 	 * @param denominator
 	 */
-	Odds(int numerator, int denominator) {
+	public Odds(int numerator, int denominator) {
 
 		this.numerator = numerator;
 		this.denominator = denominator;

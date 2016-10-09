@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import java.math.BigDecimal;
 
@@ -37,16 +37,16 @@ public class Bet {
 	}
 
 	/**
-	 * @param sb A {@link SkyBet} to base this {@link Bet} on.
+	 * @param skyBet A {@link SkyBet} to base this {@link Bet} on.
 	 */
-	public Bet(SkyBet sb) {
+	public Bet(SkyBet skyBet) {
 
 		super();
 		
-		id = sb.getId();
-		eventName = sb.getEventName();
-		name = sb.getName();
-		odds = sb.getOdds().getDecimalOdds();
+		id = skyBet.getId();
+		eventName = skyBet.getEventName();
+		name = skyBet.getName();
+		odds = skyBet.getOdds().getDecimalOdds();
 	}
 
 	/**

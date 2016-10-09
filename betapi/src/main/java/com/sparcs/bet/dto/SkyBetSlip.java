@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -28,7 +28,7 @@ public class SkyBetSlip {
 	 * @param odds The requested odds.
 	 * @param stake The amount to put at risk.
 	 */
-	SkyBetSlip(int betId, Odds odds, int stake) {
+	public SkyBetSlip(int betId, Odds odds, int stake) {
 
 		this.betId = betId;
 		this.odds = odds;

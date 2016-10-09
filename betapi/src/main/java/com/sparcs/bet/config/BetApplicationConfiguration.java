@@ -1,4 +1,4 @@
-package com.sparcs;
+package com.sparcs.bet.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
  * @author Lee Newfeld
  */
 @Configuration
-public class ApplicationConfiguration {
+public class BetApplicationConfiguration {
 	
 	/**
 	 * @return A {@link RestTemplate}, used to consume the

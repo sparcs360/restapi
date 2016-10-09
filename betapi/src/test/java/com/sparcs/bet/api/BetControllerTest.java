@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -9,7 +9,8 @@ import java.math.BigDecimal;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-import com.sparcs.BaseTest;
+import com.sparcs.bet.BaseTest;
+import com.sparcs.bet.dto.BetSlip;
 
 /**
  * {@link BetControllerImpl} tests

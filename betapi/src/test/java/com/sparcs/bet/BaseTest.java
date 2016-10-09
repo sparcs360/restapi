@@ -1,4 +1,4 @@
-package com.sparcs;
+package com.sparcs.bet;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
@@ -31,7 +31,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sparcs.betapi.SkyBetServiceTest;
 
 /**
 *  
@@ -55,7 +54,7 @@ import com.sparcs.betapi.SkyBetServiceTest;
 )
 public abstract class BaseTest {
 
-	protected static final Logger log = LoggerFactory.getLogger(SkyBetServiceTest.class);
+	protected static final Logger log = LoggerFactory.getLogger(BaseTest.class);
 
     @Autowired
     protected WebApplicationContext webApplicationContext;

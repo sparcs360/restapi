@@ -1,23 +1,18 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-/**
- * A digital receipt obtained by placing a {@link SkyBet bet} with Sky Bet
- *  
- * @author Lee Newfeld
- */
-public class SkyBetReceipt {
+public class BetReceipt {
 
-	private SkyBet bet;
+	private Bet bet;
 	private int stake;
 	private int transactionId;
 
 	/**
 	 * Default Constructor
 	 */
-	SkyBetReceipt() {
+	BetReceipt() {
 	}
 	
 	/**
@@ -27,18 +22,26 @@ public class SkyBetReceipt {
 	 * @param stake
 	 * @param transactionId
 	 */
-	SkyBetReceipt(SkyBet bet, int stake, int transactionId) {
+	public BetReceipt(Bet bet, int stake, int transactionId) {
 
 		this.bet = bet;
 		this.stake = stake;
 		this.transactionId = transactionId;
 	}
 
+	public BetReceipt(SkyBetReceipt receipt) {
+
+		SkyBet skyBet = receipt.getBet();
+		this.bet = new Bet(skyBet);
+		this.stake = receipt.getStake();
+		this.transactionId = receipt.getTransactionId();
+	}
+
 	/**
-	 * @return The {@link SkyBet bet} that was taken.
+	 * @return The {@link Bet bet} that was taken.
 	 */
 	@JsonUnwrapped
-	public SkyBet getBet() {
+	public Bet getBet() {
 		
 		return bet;
 	}
@@ -63,6 +66,6 @@ public class SkyBetReceipt {
 	@Override
 	public String toString() {
 		
-		return "SkyBetReceipt [bet=" + bet + ", stake=" + stake + ", transactionId=" + transactionId + "]";
+		return "BetReceipt [bet=" + bet + ", stake=" + stake + ", transactionId=" + transactionId + "]";
 	}
 }

@@ -1,6 +1,10 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import java.util.List;
+
+import com.sparcs.bet.dto.SkyBet;
+import com.sparcs.bet.dto.SkyBetReceipt;
+import com.sparcs.bet.dto.SkyBetSlip;
 
 /**
  * A service for consuming the SkyBet API at

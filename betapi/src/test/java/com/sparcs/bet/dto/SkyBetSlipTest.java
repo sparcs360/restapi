@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparcs.BaseTest;
+import com.sparcs.bet.BaseTest;
 
 /**
  * {@link SkyBetSlip} tests

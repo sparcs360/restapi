@@ -1,4 +1,4 @@
-package com.sparcs.betapi.internal;
+package com.sparcs.bet.api.internal;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
-import com.sparcs.betapi.SkyBetException;
-import com.sparcs.betapi.SkyBet;
-import com.sparcs.betapi.SkyBetReceipt;
-import com.sparcs.betapi.SkyBetService;
-import com.sparcs.betapi.SkyBetSlip;
+import com.sparcs.bet.api.SkyBetException;
+import com.sparcs.bet.api.SkyBetService;
+import com.sparcs.bet.dto.SkyBet;
+import com.sparcs.bet.dto.SkyBetReceipt;
+import com.sparcs.bet.dto.SkyBetSlip;
 
 /**
  * Implementation of {@link SkyBetService}.

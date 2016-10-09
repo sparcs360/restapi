@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;

@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -18,7 +18,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import com.sparcs.BaseTest;
+import com.sparcs.bet.BaseTest;
+import com.sparcs.bet.dto.Odds;
+import com.sparcs.bet.dto.SkyBet;
+import com.sparcs.bet.dto.SkyBetReceipt;
+import com.sparcs.bet.dto.SkyBetSlip;
 
 /**
  * {@link SkyBetServiceImpl} tests

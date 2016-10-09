@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.api;
 
 import org.apache.commons.io.Charsets;
 import org.springframework.http.HttpStatus;

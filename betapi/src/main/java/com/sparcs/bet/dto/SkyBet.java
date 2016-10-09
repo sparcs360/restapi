@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

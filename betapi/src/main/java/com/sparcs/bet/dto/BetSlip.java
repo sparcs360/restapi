@@ -1,4 +1,4 @@
-package com.sparcs.betapi;
+package com.sparcs.bet.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,8 +34,8 @@ public class BetSlip implements Serializable {
 	 * @param odds The requested odds.
 	 * @param stake The amount to put at risk.
 	 */
-	BetSlip(int betId, BigDecimal odds, int stake) {
-		
+	public BetSlip(int betId, BigDecimal odds, int stake) {
+
 		super();
 		
 		this.betId = betId;

@@ -1,4 +1,4 @@
-package com.sparcs.betapi.internal;
+package com.sparcs.bet.api.internal;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import com.sparcs.betapi.Bet;
-import com.sparcs.betapi.BetController;
-import com.sparcs.betapi.BetReceipt;
-import com.sparcs.betapi.BetSlip;
-import com.sparcs.betapi.SkyBetReceipt;
-import com.sparcs.betapi.SkyBetService;
-import com.sparcs.betapi.SkyBetSlip;
+import com.sparcs.bet.api.BetController;
+import com.sparcs.bet.api.SkyBetService;
+import com.sparcs.bet.dto.Bet;
+import com.sparcs.bet.dto.BetReceipt;
+import com.sparcs.bet.dto.BetSlip;
+import com.sparcs.bet.dto.SkyBetReceipt;
+import com.sparcs.bet.dto.SkyBetSlip;
 
 /**
  * Implementation of {@link BetController}.
